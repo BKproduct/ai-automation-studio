@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -138,87 +139,327 @@
       background: var(--navy); border-radius: 2px;
     }
 
-    /* ── HERO ─────────────────────────────────────────────── */
+    /* ─────────────────────────────────────────────────────────
+       HERO — Swiss Pulse
+       Design system: see DESIGN.md
+       Palette  : paper #FAFAF7 · ink #0A0A0A · accent #FF3D2E
+       Type     : Geist (display+body) · Geist Mono (numerals/labels)
+       Motion   : page-load orchestration via GSAP, idle quiet
+       ───────────────────────────────────────────────────────── */
     #hero {
-      padding-top: 136px; padding-bottom: 80px;
-      background: linear-gradient(135deg, #f0fdfa 0%, #fff 55%);
+      --sp-paper:    #FAFAF7;
+      --sp-ink:      #0A0A0A;
+      --sp-body:     #1F1F1D;
+      --sp-muted:    #6B6B68;
+      --sp-rule:     #E5E4DE;
+      --sp-accent:   #FF3D2E;
+      --sp-accent-ink:#B82215;
+
+      padding-top: 156px; padding-bottom: 128px;
+      background: var(--sp-paper);
+      color: var(--sp-ink);
       position: relative; overflow: hidden;
+      font-family: 'Geist', -apple-system, system-ui, sans-serif;
     }
+
+    /* Decorative column hairlines (very subtle, 4% ink) */
     #hero::before {
+      content: ''; position: absolute; inset: 0;
+      background-image:
+        linear-gradient(to right, rgba(10,10,10,.045) 1px, transparent 1px);
+      background-size: calc(100% / 12) 100%;
+      pointer-events: none;
+      max-width: 1200px; margin: 0 auto; left: 0; right: 0;
+      mask-image: linear-gradient(to bottom, transparent 0, #000 12%, #000 88%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 12%, #000 88%, transparent 100%);
+    }
+
+    /* Single accent bar — top right */
+    #hero::after {
       content: ''; position: absolute;
-      top: -180px; right: -180px;
-      width: 560px; height: 560px;
-      background: radial-gradient(circle, #ccfbf1 0%, transparent 70%);
-      border-radius: 50%;
+      top: 96px; right: max(32px, calc((100vw - 1200px) / 2 + 32px));
+      width: 56px; height: 3px;
+      background: var(--sp-accent);
     }
 
-    .hero-inner {
+    .sp-hero-inner {
       display: grid;
-      grid-template-columns: 1fr 420px;
-      gap: 56px; align-items: center;
+      grid-template-columns: 1.15fr 1fr;
+      gap: 72px; align-items: center;
+      position: relative; z-index: 1;
     }
 
-    .hero-badge {
-      display: inline-flex; align-items: center; gap: 8px;
-      background: var(--teal-pale); color: var(--teal-dark);
-      font-size: 12px; font-weight: 700;
-      padding: 6px 14px; border-radius: 100px;
-      border: 1px solid #99f6e4; margin-bottom: 22px;
+    /* Mono kicker */
+    .sp-kicker {
+      font-family: 'Geist Mono', ui-monospace, monospace;
+      font-size: 11px; font-weight: 500;
+      letter-spacing: .22em; text-transform: uppercase;
+      color: var(--sp-muted);
+      display: inline-flex; align-items: center; gap: 12px;
+      margin-bottom: 40px;
+    }
+    .sp-kicker::before {
+      content: ''; width: 6px; height: 6px;
+      background: var(--sp-accent);
+      display: inline-block;
+    }
+    .sp-kicker .sp-num {
+      color: var(--sp-ink); font-weight: 600;
+      font-variant-numeric: tabular-nums;
     }
 
-    .hero-title {
-      font-size: clamp(38px, 5.5vw, 66px);
-      font-weight: 900; color: var(--navy);
-      line-height: 1.07; margin-bottom: 22px;
-      letter-spacing: -.025em;
+    /* Display headline */
+    .sp-hero-title {
+      font-family: 'Geist', sans-serif;
+      font-size: clamp(48px, 7.4vw, 104px);
+      font-weight: 700;
+      line-height: .94;
+      letter-spacing: -.045em;
+      color: var(--sp-ink);
+      margin: 0 0 32px;
     }
-    .hero-title .hi { color: var(--teal); }
+    .sp-hero-title .sp-word {
+      display: inline-block; overflow: hidden; padding-bottom: .08em;
+      vertical-align: top;
+    }
+    .sp-hero-title .sp-word > span {
+      display: inline-block; will-change: transform;
+    }
+    .sp-hero-title .sp-accent {
+      color: var(--sp-accent);
+      position: relative;
+    }
+    /* Hand-drawn-style underline that draws on load */
+    .sp-hero-title .sp-accent .sp-underline {
+      position: absolute; left: 0; bottom: -.04em;
+      width: 100%; height: .12em; pointer-events: none;
+    }
+    .sp-hero-title .sp-accent .sp-underline path {
+      fill: none; stroke: var(--sp-accent); stroke-width: 4;
+      stroke-linecap: round;
+    }
+    .sp-hero-title br { display: block; content: ''; }
 
-    .hero-sub {
-      font-size: 17px; color: var(--muted);
-      line-height: 1.72; margin-bottom: 36px;
-      max-width: 500px;
+    .sp-hero-sub {
+      font-family: 'Geist', sans-serif;
+      font-size: 17px; line-height: 1.6;
+      color: var(--sp-body);
+      max-width: 540px;
+      margin: 0 0 40px;
     }
 
-    .hero-ctas { display: flex; gap: 14px; flex-wrap: wrap; }
-
-    .hero-stats {
-      display: flex; gap: 36px;
-      margin-top: 44px; padding-top: 32px;
-      border-top: 1px solid var(--border);
+    /* Buttons — sharp corners, hairline, no shadow */
+    .sp-hero-ctas { display: flex; gap: 16px; flex-wrap: wrap; }
+    .sp-btn {
+      display: inline-flex; align-items: center; gap: 10px;
+      height: 52px; padding: 0 26px;
+      font-family: 'Geist', sans-serif;
+      font-size: 14px; font-weight: 500;
+      letter-spacing: .01em;
+      text-decoration: none;
+      border-radius: 2px;
+      border: 1px solid var(--sp-ink);
+      transition: background .2s ease, color .2s ease;
+      cursor: pointer;
     }
-    .hero-stat-num { font-size: 28px; font-weight: 900; color: var(--teal); }
-    .hero-stat-label { font-size: 13px; color: var(--muted); margin-top: 3px; }
+    .sp-btn-primary {
+      background: var(--sp-ink); color: var(--sp-paper);
+    }
+    .sp-btn-primary:hover {
+      background: var(--sp-accent); border-color: var(--sp-accent); color: var(--sp-paper);
+    }
+    .sp-btn-ghost {
+      background: transparent; color: var(--sp-ink);
+    }
+    .sp-btn-ghost:hover {
+      background: var(--sp-ink); color: var(--sp-paper);
+    }
+    .sp-btn .sp-arrow { transition: transform .2s ease; }
+    .sp-btn:hover .sp-arrow { transform: translateX(4px); }
 
-    /* Floating cards */
-    .hero-visual { position: relative; }
+    /* Stats — mono numerals, vertical bars */
+    .sp-hero-stats {
+      display: grid; grid-template-columns: repeat(3, auto);
+      gap: 48px;
+      margin-top: 64px;
+      padding-top: 32px;
+      border-top: 1px solid var(--sp-rule);
+    }
+    .sp-stat-num {
+      font-family: 'Geist Mono', ui-monospace, monospace;
+      font-size: clamp(36px, 4vw, 52px);
+      font-weight: 500;
+      letter-spacing: -.02em;
+      color: var(--sp-ink);
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+      display: flex; align-items: baseline; gap: 4px;
+    }
+    .sp-stat-num .sp-unit {
+      font-size: .55em; color: var(--sp-muted); font-weight: 400;
+    }
+    .sp-stat-label {
+      font-family: 'Geist Mono', monospace;
+      font-size: 10px; font-weight: 500;
+      letter-spacing: .18em; text-transform: uppercase;
+      color: var(--sp-muted);
+      margin-top: 14px;
+    }
 
-    .float-card {
+    /* ── Hero visual — schematic workflow mock ── */
+    .sp-hero-visual {
+      position: relative;
+      width: 100%;
+      max-width: 520px;
+      height: 520px;
+      margin-left: auto;
+    }
+    .sp-mock {
+      position: absolute; inset: 0;
+    }
+    .sp-mock-card {
       position: absolute;
-      background: #fff; border-radius: 12px;
-      padding: 11px 15px;
-      box-shadow: var(--shadow-lg);
-      display: flex; align-items: center; gap: 10px;
-      border: 1px solid var(--border);
+      background: var(--sp-paper);
+      border: 1px solid var(--sp-ink);
+      padding: 16px 18px;
+      width: 200px;
+      font-family: 'Geist', sans-serif;
+      z-index: 2;
+    }
+    .sp-mock-card .sp-mc-kicker {
+      font-family: 'Geist Mono', monospace;
+      font-size: 9px; font-weight: 500;
+      letter-spacing: .2em; text-transform: uppercase;
+      color: var(--sp-muted);
+      display: flex; align-items: center; gap: 8px;
+      margin-bottom: 10px;
+    }
+    .sp-mock-card .sp-mc-kicker::before {
+      content: ''; width: 5px; height: 5px;
+      background: currentColor;
+    }
+    .sp-mock-card .sp-mc-title {
+      font-size: 13px; font-weight: 600; color: var(--sp-ink);
+      margin-bottom: 12px; line-height: 1.3;
+    }
+    .sp-mock-card .sp-mc-rows {
+      display: flex; flex-direction: column; gap: 6px;
+    }
+    .sp-mock-card .sp-mc-row {
+      height: 5px; background: var(--sp-rule); border-radius: 0;
+    }
+    .sp-mock-card .sp-mc-row.sp-w-90 { width: 90%; }
+    .sp-mock-card .sp-mc-row.sp-w-70 { width: 70%; }
+    .sp-mock-card .sp-mc-row.sp-w-50 { width: 50%; }
+    .sp-mock-card .sp-mc-row.sp-fill {
+      background: var(--sp-ink); width: 0; transition: none;
+    }
+    .sp-mock-card .sp-mc-row.sp-fill.sp-accent-fill { background: var(--sp-accent); }
+
+    .sp-mock-card.sp-mc-1 { top: 0; left: 0; }
+    .sp-mock-card.sp-mc-2 { top: 44%; right: 0; }
+    .sp-mock-card.sp-mc-3 { bottom: 12px; left: 18%; }
+
+    /* Central AI node */
+    .sp-mock-node {
+      position: absolute;
+      top: 32%; left: 50%;
+      width: 92px; height: 92px;
+      transform: translate(-50%, -50%);
+      border: 1px solid var(--sp-ink);
+      background: var(--sp-paper);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Geist Mono', monospace;
+      font-size: 11px; font-weight: 600;
+      letter-spacing: .14em;
+      border-radius: 50%;
+      z-index: 2;
+    }
+    .sp-mock-node::before {
+      content: ''; position: absolute; inset: 6px;
+      border: 1px solid var(--sp-accent);
+      border-radius: 50%;
+      opacity: 0;
+    }
+    .sp-mock-node .sp-mn-dot {
+      position: absolute; width: 10px; height: 10px;
+      background: var(--sp-accent);
+      border-radius: 50%;
+      top: 50%; left: 50%; transform: translate(-50%, -50%);
+    }
+    .sp-mock-node .sp-mn-label {
+      position: absolute; bottom: -22px; left: 50%;
+      transform: translateX(-50%);
+      font-family: 'Geist Mono', monospace;
+      font-size: 9px; letter-spacing: .22em; text-transform: uppercase;
+      color: var(--sp-muted);
       white-space: nowrap;
     }
-    .float-card.fc1 { top: 6%;  left: -20%; animation: bob 3.2s ease-in-out infinite; }
-    .float-card.fc2 { bottom: 22%; right: -12%; animation: bob 3.2s ease-in-out infinite 1.1s; }
-    .float-card.fc3 { top: 46%; left: -18%; animation: bob 3.2s ease-in-out infinite 2.2s; }
 
-    @keyframes bob {
-      0%,100% { transform: translateY(0); }
-      50%      { transform: translateY(-9px); }
+    /* SVG connectors layer */
+    .sp-mock-paths {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .sp-mock-paths path {
+      fill: none;
+      stroke: var(--sp-ink);
+      stroke-width: 1.25;
+    }
+    .sp-mock-paths path.sp-accent-path {
+      stroke: var(--sp-accent);
     }
 
-    .fc-icon {
-      width: 34px; height: 34px; border-radius: 8px;
-      background: var(--bg-light);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 16px; flex-shrink: 0;
+    /* Live ticker chip */
+    .sp-mock-ticker {
+      position: absolute;
+      bottom: -14px; right: 8px;
+      display: inline-flex; align-items: center; gap: 10px;
+      background: var(--sp-ink); color: var(--sp-paper);
+      padding: 10px 16px;
+      font-family: 'Geist Mono', monospace;
+      font-size: 10px; letter-spacing: .14em; text-transform: uppercase;
+      white-space: nowrap;
+      z-index: 4;
     }
-    .fc-text strong { display: block; font-size: 12px; font-weight: 700; color: var(--navy); }
-    .fc-text span   { font-size: 11px; color: var(--muted); }
+    .sp-mock-ticker .sp-tk-dot {
+      width: 6px; height: 6px; background: var(--sp-accent);
+      border-radius: 50%;
+      box-shadow: 0 0 0 0 var(--sp-accent);
+    }
+
+    /* Idle float for cards (subtle) */
+    @keyframes sp-float-a { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+    @keyframes sp-float-b { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+    @keyframes sp-float-c { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+    .sp-anim-ready .sp-mc-1 { animation: sp-float-a 6s ease-in-out infinite; }
+    .sp-anim-ready .sp-mc-2 { animation: sp-float-b 7s ease-in-out infinite .8s; }
+    .sp-anim-ready .sp-mc-3 { animation: sp-float-c 6.5s ease-in-out infinite 1.6s; }
+
+    /* Ticker pulse */
+    @keyframes sp-pulse {
+      0%   { box-shadow: 0 0 0 0 rgba(255,61,46,.6); }
+      80%  { box-shadow: 0 0 0 8px rgba(255,61,46,0); }
+      100% { box-shadow: 0 0 0 0 rgba(255,61,46,0); }
+    }
+    .sp-anim-ready .sp-tk-dot { animation: sp-pulse 2.2s ease-out infinite; }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      .sp-anim-ready .sp-mc-1,
+      .sp-anim-ready .sp-mc-2,
+      .sp-anim-ready .sp-mc-3,
+      .sp-anim-ready .sp-tk-dot { animation: none; }
+    }
+
+    @media (max-width: 900px) {
+      #hero { padding-top: 120px; padding-bottom: 80px; }
+      .sp-hero-inner { grid-template-columns: 1fr; gap: 56px; }
+      .sp-hero-visual { max-width: 360px; margin: 0 auto; }
+      .sp-hero-stats { gap: 28px; }
+    }
 
     /* ── PAIN ─────────────────────────────────────────────── */
     #pain { background: var(--navy); padding: 80px 0; }
@@ -459,6 +700,437 @@
       .ind-grid { grid-template-columns: repeat(2, 1fr); }
       .res-grid { grid-template-columns: repeat(2, 1fr); }
     }
+
+    /* ═══════════════════════════════════════════════════════════════════
+       SWISS PULSE — GLOBAL OVERRIDE LAYER
+       Applies the Swiss Pulse system to all pre-existing sections.
+       See DESIGN.md. High specificity intended.
+       ═══════════════════════════════════════════════════════════════════ */
+
+    :root {
+      --sp-paper:     #FAFAF7;
+      --sp-ink:       #0A0A0A;
+      --sp-ink-2:     #1F1F1D;
+      --sp-muted:     #6B6B68;
+      --sp-rule:      #E5E4DE;
+      --sp-rule-dark: #2A2A28;
+      --sp-accent:    #FF3D2E;
+      --sp-accent-2:  #B82215;
+    }
+
+    body {
+      font-family: 'Geist', -apple-system, system-ui, sans-serif !important;
+      background: var(--sp-paper);
+      color: var(--sp-ink-2);
+    }
+
+    /* ── Section frame ─────────────────────────────────────────────── */
+    section { padding: 120px 0; }
+
+    .container { max-width: 1200px; padding: 0 32px; }
+
+    /* ── Section labels (mono kicker, red dot) ─────────────────────── */
+    .section-label {
+      background: transparent !important;
+      color: var(--sp-muted) !important;
+      font-family: 'Geist Mono', monospace !important;
+      font-size: 11px !important; font-weight: 500 !important;
+      letter-spacing: .22em !important;
+      padding: 0 !important;
+      border: 0 !important; border-radius: 0 !important;
+      margin-bottom: 24px !important;
+      display: inline-flex !important; align-items: center; gap: 12px;
+    }
+    .section-label::before {
+      content: ''; width: 6px; height: 6px;
+      background: var(--sp-accent);
+      display: inline-block;
+    }
+
+    /* ── Section title / sub ──────────────────────────────────────── */
+    .section-title {
+      font-family: 'Geist', sans-serif !important;
+      font-size: clamp(34px, 4.4vw, 56px) !important;
+      font-weight: 700 !important;
+      letter-spacing: -.03em !important;
+      line-height: 1.05 !important;
+      color: var(--sp-ink) !important;
+      margin-bottom: 18px !important;
+    }
+    .section-sub {
+      font-family: 'Geist', sans-serif !important;
+      font-size: 17px !important;
+      color: var(--sp-muted) !important;
+      max-width: 640px;
+    }
+    .section-head { margin-bottom: 72px; }
+
+    /* ── Nav (Swiss Pulse) ────────────────────────────────────────── */
+    nav#navbar {
+      background: rgba(250,250,247,.92) !important;
+      border-bottom: 1px solid var(--sp-rule) !important;
+      box-shadow: none !important;
+    }
+    nav#navbar.scrolled { box-shadow: none !important; border-bottom-color: var(--sp-ink) !important; }
+    .nav-inner { height: 72px; }
+    .nav-logo {
+      color: var(--sp-ink) !important;
+      font-family: 'Geist', sans-serif;
+      font-weight: 600; font-size: 15px;
+      letter-spacing: -.01em;
+      gap: 12px !important;
+    }
+    /* Keep original target/crosshair SVG, restyle to Swiss Pulse palette */
+    .nav-logo svg rect { fill: var(--sp-ink) !important; }
+    .nav-logo svg circle[stroke], .nav-logo svg path { stroke: #fff !important; }
+    .nav-logo svg circle:last-of-type {
+      fill: #1FB95B !important;
+      filter: drop-shadow(0 0 1.5px rgba(31,185,91,.85));
+    }
+    .nav-links a {
+      color: var(--sp-muted) !important;
+      font-family: 'Geist Mono', monospace;
+      font-size: 11px; font-weight: 500;
+      letter-spacing: .18em; text-transform: uppercase;
+      transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--sp-ink) !important; }
+    .lang-toggle {
+      background: transparent !important;
+      border: 1px solid var(--sp-ink);
+      border-radius: 0 !important;
+      padding: 0 !important;
+      overflow: hidden;
+    }
+    .lang-btn {
+      background: transparent !important;
+      color: var(--sp-muted) !important;
+      font-family: 'Geist Mono', monospace !important;
+      font-size: 10px !important; font-weight: 500 !important;
+      letter-spacing: .15em !important;
+      padding: 8px 12px !important;
+      border-radius: 0 !important;
+      border: 0 !important;
+      transition: background .2s, color .2s;
+    }
+    .lang-btn.active {
+      background: var(--sp-ink) !important;
+      color: var(--sp-paper) !important;
+      box-shadow: none !important;
+    }
+    /* Nav primary button (Book a Call) */
+    nav#navbar .btn.btn-primary {
+      background: var(--sp-ink) !important;
+      border-radius: 2px !important;
+      border: 1px solid var(--sp-ink) !important;
+      color: var(--sp-paper) !important;
+      font-family: 'Geist', sans-serif !important;
+      font-weight: 500 !important;
+      letter-spacing: .01em;
+      height: 40px; padding: 0 18px !important;
+      box-shadow: none !important;
+      transform: none !important;
+      transition: background .2s, color .2s;
+    }
+    nav#navbar .btn.btn-primary:hover {
+      background: var(--sp-accent) !important;
+      border-color: var(--sp-accent) !important;
+    }
+
+    /* ── Global buttons restyle ───────────────────────────────────── */
+    .btn {
+      border-radius: 2px !important;
+      font-family: 'Geist', sans-serif !important;
+      font-weight: 500 !important;
+      letter-spacing: .01em !important;
+      height: 52px; padding: 0 26px !important;
+      box-shadow: none !important;
+      transform: none !important;
+    }
+    .btn-primary {
+      background: var(--sp-ink) !important;
+      border: 1px solid var(--sp-ink) !important;
+      color: var(--sp-paper) !important;
+    }
+    .btn-primary:hover {
+      background: var(--sp-accent) !important;
+      border-color: var(--sp-accent) !important;
+      box-shadow: none !important;
+      transform: none !important;
+    }
+    .btn-outline {
+      background: transparent !important;
+      color: var(--sp-ink) !important;
+      border: 1px solid var(--sp-ink) !important;
+    }
+    .btn-outline:hover {
+      background: var(--sp-ink) !important;
+      color: var(--sp-paper) !important;
+      transform: none !important;
+    }
+    .btn-white {
+      background: var(--sp-paper) !important;
+      color: var(--sp-ink) !important;
+      border: 1px solid var(--sp-paper) !important;
+    }
+    .btn-white:hover {
+      background: var(--sp-accent) !important;
+      border-color: var(--sp-accent) !important;
+      color: var(--sp-paper) !important;
+      transform: none !important;
+    }
+
+    /* ═══ PAIN — dark ink canvas ═══ */
+    #pain {
+      background: var(--sp-ink) !important;
+      padding: 120px 0;
+    }
+    #pain .section-label { color: #9A9A95 !important; }
+    #pain .section-label::before { background: var(--sp-accent); }
+    #pain .section-title { color: var(--sp-paper) !important; }
+    #pain .section-sub { color: #9A9A95 !important; }
+    .pain-grid { gap: 1px !important; background: var(--sp-rule-dark); padding: 1px;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)) !important;
+    }
+    .pain-card {
+      background: var(--sp-ink) !important;
+      border: 0 !important;
+      border-radius: 0 !important;
+      padding: 36px !important;
+      transition: background .25s ease;
+    }
+    .pain-card:hover {
+      background: #181816 !important;
+      transform: none !important;
+      border-color: transparent !important;
+    }
+    .pain-num {
+      background: transparent !important;
+      color: var(--sp-accent) !important;
+      font-family: 'Geist Mono', monospace !important;
+      font-size: 11px !important;
+      letter-spacing: .22em !important;
+      width: auto !important; height: auto !important;
+      border-radius: 0 !important;
+      justify-content: flex-start !important;
+      margin-bottom: 18px !important;
+    }
+    .pain-num::before { content: '— '; color: var(--sp-muted); margin-right: 4px; }
+    .pain-name {
+      color: var(--sp-paper) !important;
+      font-family: 'Geist', sans-serif !important;
+      font-size: 19px !important; font-weight: 600 !important;
+      letter-spacing: -.01em;
+      margin-bottom: 12px !important;
+    }
+    .pain-body {
+      color: #9A9A95 !important;
+      font-size: 14.5px !important; line-height: 1.65 !important;
+    }
+
+    /* ═══ SERVICES — hairline cards on paper ═══ */
+    #services { background: var(--sp-paper) !important; }
+    .services-grid { gap: 28px !important; }
+    .svc-card {
+      border: 1px solid var(--sp-rule) !important;
+      border-radius: 0 !important;
+      box-shadow: none !important;
+      padding: 40px !important;
+      background: var(--sp-paper) !important;
+      transition: border-color .25s, transform .25s;
+    }
+    .svc-card:hover {
+      box-shadow: none !important;
+      border-color: var(--sp-ink) !important;
+      transform: translateY(-2px) !important;
+    }
+    .svc-icon {
+      background: var(--sp-ink) !important;
+      color: var(--sp-paper) !important;
+      border-radius: 0 !important;
+      width: 44px !important; height: 44px !important;
+      font-size: 20px !important;
+      margin-bottom: 22px !important;
+    }
+    .svc-title {
+      color: var(--sp-ink) !important;
+      font-family: 'Geist', sans-serif !important;
+      font-size: 22px !important; font-weight: 600 !important;
+      letter-spacing: -.015em;
+    }
+    .svc-desc {
+      color: var(--sp-muted) !important;
+      font-size: 14.5px !important; line-height: 1.65 !important;
+    }
+    .svc-list li {
+      font-family: 'Geist', sans-serif !important;
+      color: var(--sp-ink-2) !important;
+      font-size: 13.5px !important;
+    }
+    .svc-list li::before {
+      background: var(--sp-ink) !important;
+      color: var(--sp-paper) !important;
+      border-radius: 0 !important;
+      content: '+';
+      font-weight: 500 !important;
+      width: 16px !important; height: 16px !important;
+    }
+    .svc-char { opacity: .55; filter: grayscale(.4); }
+    .svc-card:hover .svc-char { opacity: 1; filter: none; transition: all .3s; }
+
+    /* ═══ INDUSTRIES — minimal hairline grid ═══ */
+    #industries { background: var(--sp-paper) !important; }
+    .ind-grid { gap: 1px !important; background: var(--sp-rule); padding: 1px; }
+    .ind-card {
+      background: var(--sp-paper) !important;
+      border: 0 !important; border-radius: 0 !important;
+      box-shadow: none !important;
+      padding: 36px 24px !important;
+      transition: background .25s;
+    }
+    .ind-card:hover {
+      background: var(--sp-ink) !important;
+      border-color: transparent !important;
+      transform: none !important;
+      box-shadow: none !important;
+    }
+    .ind-card:hover .ind-name { color: var(--sp-paper); }
+    .ind-card:hover .ind-desc { color: #9A9A95; }
+    .ind-emoji {
+      font-size: 28px !important;
+      filter: grayscale(1); opacity: .8;
+      transition: filter .25s, opacity .25s;
+    }
+    .ind-card:hover .ind-emoji { filter: none; opacity: 1; }
+    .ind-name {
+      color: var(--sp-ink) !important;
+      font-family: 'Geist', sans-serif !important;
+      font-size: 15px !important; font-weight: 600 !important;
+      transition: color .25s;
+    }
+    .ind-desc {
+      color: var(--sp-muted) !important;
+      font-size: 12.5px !important;
+      transition: color .25s;
+    }
+
+    /* ═══ PROCESS — timeline w/ animated SVG path ═══ */
+    #process { background: var(--sp-paper) !important; position: relative; }
+    .proc-grid::before { display: none !important; }
+    .proc-grid {
+      position: relative;
+      padding-top: 60px;
+    }
+    /* New SVG track behind step numbers */
+    .proc-track {
+      position: absolute; top: 86px; left: 0; right: 0;
+      height: 2px;
+      pointer-events: none;
+    }
+    .proc-track svg { width: 100%; height: 100%; display: block; overflow: visible; }
+    .proc-track svg path { fill: none; stroke: var(--sp-ink); stroke-width: 1.5; }
+    .proc-track svg path.sp-accent-path { stroke: var(--sp-accent); }
+    .step-num {
+      background: var(--sp-paper) !important;
+      color: var(--sp-ink) !important;
+      border: 1px solid var(--sp-ink) !important;
+      border-radius: 50%;
+      width: 56px !important; height: 56px !important;
+      font-family: 'Geist Mono', monospace !important;
+      font-size: 14px !important;
+      font-weight: 500 !important;
+      letter-spacing: .12em !important;
+      position: relative;
+      z-index: 2;
+    }
+    .proc-step { text-align: left !important; }
+    .proc-step .step-num { margin: 0 0 24px 0 !important; }
+    .step-name, .proc-title, .proc-step h3 {
+      font-family: 'Geist', sans-serif !important;
+      color: var(--sp-ink) !important;
+      font-size: 18px !important; font-weight: 600 !important;
+    }
+    .step-desc, .proc-step p {
+      color: var(--sp-muted) !important;
+      font-size: 14px !important;
+      line-height: 1.6 !important;
+    }
+
+    /* ═══ RESULTS — dark stats canvas ═══ */
+    #results {
+      background: var(--sp-ink) !important;
+      padding: 100px 0 !important;
+    }
+    .res-grid {
+      gap: 1px !important; background: var(--sp-rule-dark); padding: 0;
+    }
+    .res-grid > * {
+      background: var(--sp-ink); padding: 36px 28px;
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .res-num, .result-num, .results-grid .num, .res-grid strong {
+      font-family: 'Geist Mono', monospace !important;
+      color: var(--sp-paper) !important;
+      font-size: clamp(36px, 4vw, 56px) !important;
+      font-weight: 500 !important;
+      letter-spacing: -.02em !important;
+      font-variant-numeric: tabular-nums;
+    }
+    .res-label, .result-label, .res-grid small, .res-grid span {
+      font-family: 'Geist Mono', monospace !important;
+      color: #9A9A95 !important;
+      font-size: 11px !important;
+      letter-spacing: .18em !important;
+      text-transform: uppercase;
+    }
+
+    /* ═══ CTA — ink canvas, accent bar ═══ */
+    #cta { background: var(--sp-paper) !important; padding: 120px 0; }
+    .cta-box {
+      background: var(--sp-ink) !important;
+      border-radius: 0 !important;
+      padding: 80px !important;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-box::before {
+      content: '' !important;
+      background: none !important;
+      position: absolute !important; top: 0 !important; left: 0 !important;
+      width: 6px !important; height: 100% !important;
+      background-color: var(--sp-accent) !important;
+      border-radius: 0 !important;
+    }
+    .cta-title {
+      font-family: 'Geist', sans-serif !important;
+      font-size: clamp(36px, 4.2vw, 56px) !important;
+      font-weight: 700 !important;
+      letter-spacing: -.03em !important;
+      color: var(--sp-paper) !important;
+      line-height: 1.05 !important;
+    }
+    .cta-sub {
+      color: #9A9A95 !important;
+      font-size: 17px !important;
+      line-height: 1.6 !important;
+    }
+    .cta-box .cta-char { display: none !important; }
+
+    /* ═══ FOOTER ═══ */
+    footer {
+      background: var(--sp-paper) !important;
+      border-top: 1px solid var(--sp-rule);
+      color: var(--sp-muted) !important;
+      font-family: 'Geist', sans-serif !important;
+    }
+    footer a { color: var(--sp-ink) !important; }
+    footer * { font-family: 'Geist', sans-serif !important; }
+
+    /* ── Reveal class for ScrollTrigger entrances ────────────────── */
+    .sp-reveal { opacity: 0; transform: translateY(28px); }
+    @media (prefers-reduced-motion: reduce) {
+      .sp-reveal { opacity: 1; transform: none; }
+    }
   </style>
 </head>
 <body>
@@ -504,56 +1176,142 @@
 </nav>
 
 
-<!-- ═══════════════════════════════ HERO ════════════════════════════════ -->
+<!-- ═══════════════════════════════ HERO — Swiss Pulse ════════════════════════════════ -->
 <section id="hero">
   <div class="container">
-    <div class="hero-inner">
+    <div class="sp-hero-inner">
 
       <!-- LEFT: copy -->
-      <div>
-        <div class="hero-badge">
-          <svg width="13" height="13" fill="none" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <span class="en">UK & Dubai · AI-First Agency</span>
-          <span class="ru">Великобритания & Дубай · AI-агентство</span>
+      <div class="sp-hero-copy">
+        <div class="sp-kicker">
+          <span class="en">AI Automation Studio</span><span class="ru">AI Automation Studio</span>
+          <span class="sp-num">— 04 / UK · DXB</span>
         </div>
 
-        <h1 class="hero-title">
-          <span class="en">Automate.<br><span class="hi">Scale.</span><br>Grow.</span>
-          <span class="ru">Автоматизируй.<br><span class="hi">Масштабируй.</span><br>Расти.</span>
+        <h1 class="sp-hero-title">
+          <span class="en">
+            <span class="sp-word"><span>Automate.</span></span><br>
+            <span class="sp-word sp-accent">
+              <span>Scale.</span>
+              <svg class="sp-underline" viewBox="0 0 240 12" preserveAspectRatio="none" aria-hidden="true">
+                <path d="M3 8 C 60 2, 120 11, 237 5" />
+              </svg>
+            </span><br>
+            <span class="sp-word"><span>Grow.</span></span>
+          </span>
+          <span class="ru">
+            <span class="sp-word"><span>Автоматизируй.</span></span><br>
+            <span class="sp-word sp-accent">
+              <span>Масштабируй.</span>
+              <svg class="sp-underline" viewBox="0 0 360 12" preserveAspectRatio="none" aria-hidden="true">
+                <path d="M3 8 C 90 2, 180 11, 357 5" />
+              </svg>
+            </span><br>
+            <span class="sp-word"><span>Расти.</span></span>
+          </span>
         </h1>
 
-        <p class="hero-sub">
+        <p class="sp-hero-sub">
           <span class="en">AI-powered process automation, trend watching, and mass content creation for service firms, manufacturers, accountants, law practices, and e-commerce brands in the UK and Dubai.</span>
           <span class="ru">AI-автоматизация процессов, мониторинг трендов и массовое создание контента для сервисных компаний, производителей, бухгалтеров, юристов и e-commerce брендов в Великобритании и Дубае.</span>
         </p>
 
-        <div class="hero-ctas">
-          <a href="https://calendly.com/dmir017" target="_blank" class="btn btn-primary">
-            📅 <span class="en">Book a Free Call</span><span class="ru">Записаться на звонок</span>
+        <div class="sp-hero-ctas">
+          <a href="https://calendly.com/dmir017" target="_blank" class="sp-btn sp-btn-primary">
+            <span class="en">Book a free call</span><span class="ru">Записаться на звонок</span>
+            <span class="sp-arrow" aria-hidden="true">→</span>
           </a>
-          <a href="mailto:boris.korol@ai-automation.studio" class="btn btn-outline">
-            ✉️ <span class="en">Send an Email</span><span class="ru">Написать нам</span>
+          <a href="mailto:boris.korol@ai-automation.studio" class="sp-btn sp-btn-ghost">
+            <span class="en">Send an email</span><span class="ru">Написать нам</span>
           </a>
         </div>
 
-        <div class="hero-stats">
+        <div class="sp-hero-stats">
           <div>
-            <div class="hero-stat-num">1.5×</div>
-            <div class="hero-stat-label"><span class="en">Productivity boost</span><span class="ru">Рост продуктивности</span></div>
+            <div class="sp-stat-num"><span data-count="1.5">0.0</span><span class="sp-unit">×</span></div>
+            <div class="sp-stat-label"><span class="en">Productivity boost</span><span class="ru">Рост продуктивности</span></div>
           </div>
           <div>
-            <div class="hero-stat-num">85%</div>
-            <div class="hero-stat-label"><span class="en">Faster processes</span><span class="ru">Быстрее процессы</span></div>
+            <div class="sp-stat-num"><span data-count="85">0</span><span class="sp-unit">%</span></div>
+            <div class="sp-stat-label"><span class="en">Faster processes</span><span class="ru">Быстрее процессы</span></div>
           </div>
           <div>
-            <div class="hero-stat-num">24/7</div>
-            <div class="hero-stat-label"><span class="en">AI monitoring</span><span class="ru">AI-мониторинг</span></div>
+            <div class="sp-stat-num"><span>24</span><span class="sp-unit">/7</span></div>
+            <div class="sp-stat-label"><span class="en">AI monitoring</span><span class="ru">AI-мониторинг</span></div>
           </div>
         </div>
       </div>
 
-      <!-- RIGHT: character + floating cards -->
-      <div class="hero-visual">
+      <!-- RIGHT: schematic workflow mock -->
+      <div class="sp-hero-visual">
+        <div class="sp-mock" aria-hidden="true">
+
+          <!-- SVG connector paths — coords relative to 520x520 visual box -->
+          <svg class="sp-mock-paths" viewBox="0 0 520 520" preserveAspectRatio="none">
+            <!-- Intake (top-left card) → AI node (center, 32% y) -->
+            <path class="sp-mock-path-1" d="M 130 110 C 150 140, 200 150, 240 162" />
+            <!-- AI node → Process (right card, 44% y) -->
+            <path class="sp-mock-path-2 sp-accent-path" d="M 290 182 C 340 210, 380 230, 410 242" />
+            <!-- AI node → Output (bottom card, ~95% y) -->
+            <path class="sp-mock-path-3" d="M 260 220 C 260 320, 260 380, 240 432" />
+          </svg>
+
+          <!-- Card 1 — Intake -->
+          <div class="sp-mock-card sp-mc-1">
+            <div class="sp-mc-kicker">01 · Intake</div>
+            <div class="sp-mc-title">
+              <span class="en">Inbox · CRM · Sheets</span><span class="ru">Inbox · CRM · Sheets</span>
+            </div>
+            <div class="sp-mc-rows">
+              <div class="sp-mc-row sp-w-90"></div>
+              <div class="sp-mc-row sp-w-70"></div>
+              <div class="sp-mc-row sp-w-50"></div>
+            </div>
+          </div>
+
+          <!-- Card 2 — Process / Trend -->
+          <div class="sp-mock-card sp-mc-2">
+            <div class="sp-mc-kicker">02 · Trend</div>
+            <div class="sp-mc-title">
+              <span class="en">+12 signals · 3 hot</span><span class="ru">+12 сигналов · 3 горячих</span>
+            </div>
+            <div class="sp-mc-rows">
+              <div class="sp-mc-row sp-w-90"></div>
+              <div class="sp-mc-row sp-fill sp-accent-fill" data-fill="78"></div>
+              <div class="sp-mc-row sp-w-50"></div>
+            </div>
+          </div>
+
+          <!-- Card 3 — Output -->
+          <div class="sp-mock-card sp-mc-3">
+            <div class="sp-mc-kicker">03 · Output</div>
+            <div class="sp-mc-title">
+              <span class="en">48 posts shipped</span><span class="ru">48 постов отправлено</span>
+            </div>
+            <div class="sp-mc-rows">
+              <div class="sp-mc-row sp-fill" data-fill="92"></div>
+              <div class="sp-mc-row sp-w-70"></div>
+            </div>
+          </div>
+
+          <!-- Central node -->
+          <div class="sp-mock-node">
+            <span class="sp-mn-dot"></span>
+            <span class="sp-mn-label">AI · CORE</span>
+          </div>
+
+          <!-- Live ticker -->
+          <div class="sp-mock-ticker">
+            <span class="sp-tk-dot"></span>
+            <span class="en">Live · 3.2 hrs saved today</span>
+            <span class="ru">Live · 3.2 ч сэкономлено</span>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Legacy hidden block (kept for safe diff; remove next pass) -->
+      <div class="hero-visual" style="display:none">
 
         <!-- Float card 1 -->
         <div class="float-card fc1">
@@ -1096,23 +1854,31 @@
     </div>
 
     <div class="proc-grid">
+      <!-- Swiss Pulse animated track -->
+      <div class="proc-track" aria-hidden="true">
+        <svg viewBox="0 0 1000 8" preserveAspectRatio="none">
+          <path class="sp-proc-path-bg" d="M 80 4 H 920" stroke="#E5E4DE" stroke-width="1.5" fill="none"/>
+          <path class="sp-proc-path" d="M 80 4 H 920" />
+          <path class="sp-proc-path sp-accent-path" d="M 80 4 H 240" />
+        </svg>
+      </div>
       <div class="proc-step">
-        <div class="step-num">1</div>
+        <div class="step-num">01</div>
         <div class="step-title"><span class="en">Free Discovery Call</span><span class="ru">Бесплатный звонок</span></div>
         <p class="step-desc"><span class="en">We map your current workflows, identify the biggest automation opportunities, and estimate ROI — no cost, no commitment.</span><span class="ru">Изучаем ваши процессы, находим точки автоматизации и считаем ROI — бесплатно и без обязательств.</span></p>
       </div>
       <div class="proc-step">
-        <div class="step-num">2</div>
+        <div class="step-num">02</div>
         <div class="step-title"><span class="en">Custom Audit & Plan</span><span class="ru">Аудит и план</span></div>
         <p class="step-desc"><span class="en">Detailed automation audit with a prioritised roadmap tailored to your sector, tech stack, and team size.</span><span class="ru">Детальный аудит автоматизации с приоритетной дорожной картой под вашу отрасль, технологический стек и размер команды.</span></p>
       </div>
       <div class="proc-step">
-        <div class="step-num">3</div>
+        <div class="step-num">03</div>
         <div class="step-title"><span class="en">Build & Launch</span><span class="ru">Разработка и запуск</span></div>
         <p class="step-desc"><span class="en">We build, test, and deploy your automations. First workflows go live within days, not months.</span><span class="ru">Строим, тестируем и запускаем автоматизации. Первые рабочие процессы запускаются за дни, не месяцы.</span></p>
       </div>
       <div class="proc-step">
-        <div class="step-num">4</div>
+        <div class="step-num">04</div>
         <div class="step-title"><span class="en">Train & Support</span><span class="ru">Обучение и поддержка</span></div>
         <p class="step-desc"><span class="en">We train your team, monitor performance, and refine automations as your business evolves. Always on call.</span><span class="ru">Обучаем команду, следим за показателями и дорабатываем автоматизации по мере роста вашего бизнеса.</span></p>
       </div>
@@ -1126,28 +1892,28 @@
   <div class="container">
     <div class="res-grid">
       <div class="res-item">
-        <div class="res-num">1.5×</div>
+        <div class="res-num"><span data-count="1.5">0.0</span>×</div>
         <div class="res-label">
           <strong><span class="en">Productivity</span><span class="ru">Продуктивность</span></strong>
           <span><span class="en">Average staff output increase</span><span class="ru">Средний рост выработки</span></span>
         </div>
       </div>
       <div class="res-item">
-        <div class="res-num">85%</div>
+        <div class="res-num"><span data-count="85">0</span>%</div>
         <div class="res-label">
           <strong><span class="en">Faster Processes</span><span class="ru">Скорость процессов</span></strong>
           <span><span class="en">Reduction in manual processing time</span><span class="ru">Сокращение ручной обработки</span></span>
         </div>
       </div>
       <div class="res-item">
-        <div class="res-num">90%</div>
+        <div class="res-num"><span data-count="90">0</span>%</div>
         <div class="res-label">
           <strong><span class="en">Fewer Errors</span><span class="ru">Меньше ошибок</span></strong>
           <span><span class="en">Automated validation catches mistakes</span><span class="ru">Автоматическая валидация</span></span>
         </div>
       </div>
       <div class="res-item">
-        <div class="res-num">10×</div>
+        <div class="res-num"><span data-count="10">0</span>×</div>
         <div class="res-label">
           <strong><span class="en">More Content</span><span class="ru">Больше контента</span></strong>
           <span><span class="en">Published at the same cost</span><span class="ru">При тех же затратах</span></span>
@@ -1309,6 +2075,270 @@
       }
     });
   });
+</script>
+
+<!-- ─── Swiss Pulse choreography ─────────────────────────────────── -->
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js" defer></script>
+<script defer>
+(() => {
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  window.addEventListener('load', () => {
+    if (!window.gsap) return;
+    const gsap = window.gsap;
+
+    // Lenis smooth scroll (with ScrollTrigger integration if available)
+    if (!prefersReduced && window.Lenis) {
+      const lenis = new Lenis({ lerp: 0.1, duration: 1.1, smoothWheel: true });
+      window.__lenis = lenis;
+      if (window.ScrollTrigger) {
+        lenis.on('scroll', window.ScrollTrigger.update);
+        gsap.ticker.add((time) => { lenis.raf(time * 1000); });
+        gsap.ticker.lagSmoothing(0);
+      } else {
+        const raf = (t) => { lenis.raf(t); requestAnimationFrame(raf); };
+        requestAnimationFrame(raf);
+      }
+    }
+
+    // ── Prep underline draw ───────────────────────────────────────────
+    document.querySelectorAll('.sp-hero-title .sp-underline path').forEach(p => {
+      const len = p.getTotalLength();
+      p.style.strokeDasharray = len;
+      p.style.strokeDashoffset = len;
+    });
+
+    // ── Prep connector path draw ──────────────────────────────────────
+    document.querySelectorAll('.sp-mock-paths path').forEach(p => {
+      const len = p.getTotalLength();
+      p.style.strokeDasharray = len;
+      p.style.strokeDashoffset = len;
+    });
+
+    if (prefersReduced) {
+      // Just reveal everything statically
+      gsap.set([
+        '.sp-kicker', '.sp-hero-title .sp-word > span',
+        '.sp-hero-sub', '.sp-hero-ctas .sp-btn',
+        '.sp-hero-stats > div', '.sp-mock-card', '.sp-mock-node',
+        '.sp-mock-ticker'
+      ], { opacity: 1, y: 0, scale: 1 });
+      gsap.set('.sp-mock-paths path, .sp-hero-title .sp-underline path', { strokeDashoffset: 0 });
+      document.querySelectorAll('.sp-mock-card .sp-fill').forEach(el => {
+        el.style.width = (el.dataset.fill || 60) + '%';
+      });
+      document.querySelector('.sp-hero-visual')?.classList.add('sp-anim-ready');
+      return;
+    }
+
+    // ── Initial state ─────────────────────────────────────────────────
+    gsap.set('.sp-kicker', { opacity: 0, y: 14 });
+    gsap.set('.sp-hero-title .sp-word > span', { y: '110%' });
+    gsap.set('.sp-hero-sub', { opacity: 0, y: 20 });
+    gsap.set('.sp-hero-ctas .sp-btn', { opacity: 0, y: 18 });
+    gsap.set('.sp-hero-stats > div', { opacity: 0, y: 16 });
+    gsap.set('.sp-mock-card', { opacity: 0, y: 22 });
+    gsap.set('.sp-mock-node', { opacity: 0, scale: 0.4 });
+    gsap.set('.sp-mock-node .sp-mn-dot', { scale: 0.6 });
+    gsap.set('.sp-mock-ticker', { opacity: 0, y: 10 });
+
+    // ── Master timeline ───────────────────────────────────────────────
+    const tl = gsap.timeline({ defaults: { ease: 'power3.out' }, delay: 0.15 });
+
+    // Kicker
+    tl.to('.sp-kicker', { opacity: 1, y: 0, duration: 0.55, ease: 'power2.out' }, 0);
+
+    // Headline words — only animate currently-visible language
+    const activeLang = document.documentElement.lang || 'en';
+    const wordSel = `.sp-hero-title .${activeLang} .sp-word > span`;
+    tl.to(wordSel, {
+      y: '0%', duration: 0.75, ease: 'expo.out', stagger: 0.09
+    }, 0.1);
+
+    // Underline draws after accent word lands
+    tl.to(`.sp-hero-title .${activeLang} .sp-underline path`, {
+      strokeDashoffset: 0, duration: 0.7, ease: 'power2.inOut'
+    }, 0.55);
+
+    // Sub
+    tl.to('.sp-hero-sub', { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' }, 0.55);
+
+    // CTAs
+    tl.to('.sp-hero-ctas .sp-btn', {
+      opacity: 1, y: 0, duration: 0.5, ease: 'power2.out', stagger: 0.08
+    }, 0.75);
+
+    // Mock — cards stagger in
+    tl.to('.sp-mock-card', {
+      opacity: 1, y: 0, duration: 0.6, ease: 'power3.out', stagger: 0.12
+    }, 0.4);
+
+    // Connector paths draw (intake → node → output)
+    tl.to('.sp-mock-paths .sp-mock-path-1', {
+      strokeDashoffset: 0, duration: 0.7, ease: 'power2.inOut'
+    }, 0.7);
+    tl.to('.sp-mock-node', {
+      opacity: 1, scale: 1, duration: 0.55, ease: 'back.out(2.2)'
+    }, 0.9);
+    tl.to('.sp-mock-paths .sp-mock-path-2', {
+      strokeDashoffset: 0, duration: 0.6, ease: 'power2.inOut'
+    }, 1.05);
+    tl.to('.sp-mock-paths .sp-mock-path-3', {
+      strokeDashoffset: 0, duration: 0.7, ease: 'power2.inOut'
+    }, 1.15);
+
+    // Node pulse (single beat)
+    tl.fromTo('.sp-mock-node .sp-mn-dot', { scale: 1 }, {
+      scale: 1.5, duration: 0.25, ease: 'power1.out', yoyo: true, repeat: 1
+    }, 1.3);
+
+    // Progress bar fills (Process + Output)
+    document.querySelectorAll('.sp-mock-card .sp-fill').forEach(el => {
+      const pct = parseInt(el.dataset.fill || '60', 10);
+      tl.to(el, { width: pct + '%', duration: 0.9, ease: 'power3.out' }, 1.35);
+    });
+
+    // Ticker
+    tl.to('.sp-mock-ticker', { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }, 1.55);
+
+    // Stats (delayed last)
+    tl.to('.sp-hero-stats > div', {
+      opacity: 1, y: 0, duration: 0.55, ease: 'power2.out', stagger: 0.1
+    }, 0.95);
+
+    // Counter rolls on stats with [data-count]
+    document.querySelectorAll('.sp-stat-num [data-count]').forEach(el => {
+      const target = parseFloat(el.dataset.count);
+      const decimals = (el.dataset.count.split('.')[1] || '').length;
+      const obj = { v: 0 };
+      tl.to(obj, {
+        v: target, duration: 1.2, ease: 'power3.out',
+        onUpdate: () => { el.textContent = obj.v.toFixed(decimals); }
+      }, 1.1);
+    });
+
+    // After timeline starts the idle layer
+    tl.add(() => {
+      document.querySelector('.sp-hero-visual')?.classList.add('sp-anim-ready');
+    }, 1.8);
+
+    // ════════════════════════════════════════════════════════════════
+    // SCROLL-TRIGGERED ENTRANCES — Swiss Pulse
+    // ════════════════════════════════════════════════════════════════
+    if (window.ScrollTrigger) {
+      gsap.registerPlugin(ScrollTrigger);
+
+      // Helper: reveal selector with stagger on scroll.
+      // Uses IntersectionObserver-like check: if element already in viewport on load,
+      // animate it immediately. Otherwise wait until it scrolls in.
+      const reveal = (selector, opts = {}) => {
+        const els = gsap.utils.toArray(selector);
+        if (!els.length) return;
+        const vh = window.innerHeight;
+        els.forEach((el, i) => {
+          const rect = el.getBoundingClientRect();
+          const alreadyVisible = rect.top < vh * 0.95 && rect.bottom > 0;
+          const stagger = (opts.stagger ?? 0.08) * (i % 8);
+          const tween = {
+            opacity: 0,
+            y: opts.y ?? 28,
+            duration: opts.duration ?? 0.75,
+            ease: opts.ease || 'power3.out',
+          };
+          if (alreadyVisible) {
+            gsap.from(el, { ...tween, delay: 0.2 + stagger, overwrite: 'auto' });
+          } else {
+            gsap.from(el, {
+              ...tween,
+              delay: stagger,
+              scrollTrigger: {
+                trigger: el,
+                start: opts.start || 'top 90%',
+                once: true,
+              },
+              overwrite: 'auto',
+            });
+          }
+        });
+      };
+
+      // Section heads
+      reveal('#pain .section-head > *, #services .section-head > *, #industries .section-head > *, #process .section-head > *, #cta .section-head > *', { stagger: 0.06 });
+
+      // Pain cards
+      reveal('.pain-card', { y: 36, stagger: 0.07 });
+
+      // Services cards
+      reveal('.svc-card', { y: 40, stagger: 0.1, duration: 0.8 });
+
+      // Industries cards
+      reveal('.ind-card', { y: 24, stagger: 0.06 });
+
+      // Process steps
+      reveal('.proc-step', { y: 30, stagger: 0.12 });
+
+      // Results numbers
+      reveal('#results .res-grid > *', { y: 24, stagger: 0.08 });
+
+      // CTA
+      reveal('.cta-box > *', { y: 22, stagger: 0.08 });
+
+      // ── Process timeline path draw (scrubs on scroll) ──
+      const procPath = document.querySelector('.proc-track .sp-proc-path:not(.sp-accent-path)');
+      const procAccent = document.querySelector('.proc-track .sp-accent-path');
+      if (procPath) {
+        const lenBase = procPath.getTotalLength();
+        procPath.style.strokeDasharray = lenBase;
+        procPath.style.strokeDashoffset = lenBase;
+        gsap.to(procPath, {
+          strokeDashoffset: 0,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: '#process .proc-grid',
+            start: 'top 70%',
+            end: 'bottom 30%',
+            scrub: 0.6,
+          }
+        });
+      }
+      if (procAccent) {
+        const lenA = procAccent.getTotalLength();
+        procAccent.style.strokeDasharray = lenA;
+        procAccent.style.strokeDashoffset = lenA;
+        gsap.to(procAccent, {
+          strokeDashoffset: 0,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: '#process .proc-grid',
+            start: 'top 70%',
+            end: 'center 50%',
+            scrub: 0.6,
+          }
+        });
+      }
+
+      // ── Counter rolls on results ──
+      document.querySelectorAll('#results [data-count]').forEach(el => {
+        const target = parseFloat(el.dataset.count);
+        const decimals = (el.dataset.count.split('.')[1] || '').length;
+        const obj = { v: 0 };
+        ScrollTrigger.create({
+          trigger: el,
+          start: 'top 85%',
+          once: true,
+          onEnter: () => {
+            gsap.to(obj, {
+              v: target, duration: 1.4, ease: 'power3.out',
+              onUpdate: () => { el.textContent = obj.v.toFixed(decimals); }
+            });
+          }
+        });
+      });
+    }
+  });
+})();
 </script>
 
 </body>
