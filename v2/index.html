@@ -781,11 +781,18 @@
       gap: 12px !important;
     }
     /* Keep original target/crosshair SVG, restyle to Swiss Pulse palette */
-    .nav-logo svg rect { fill: var(--sp-ink) !important; }
-    .nav-logo svg circle[stroke], .nav-logo svg path { stroke: #fff !important; }
-    .nav-logo svg circle:last-of-type {
+    .nav-logo svg rect, .foot-logo svg rect { fill: var(--sp-ink) !important; }
+    .nav-logo svg circle[stroke], .nav-logo svg path,
+    .foot-logo svg circle[stroke], .foot-logo svg path { stroke: #fff !important; }
+    .nav-logo svg circle:last-of-type,
+    .foot-logo svg circle:last-of-type {
       fill: #1FB95B !important;
       filter: drop-shadow(0 0 1.5px rgba(31,185,91,.85));
+    }
+    .foot-logo {
+      color: var(--sp-ink) !important;
+      font-family: 'Geist', sans-serif;
+      font-weight: 600 !important;
     }
     .nav-links a {
       color: var(--sp-muted) !important;
@@ -2080,7 +2087,6 @@
 <!-- ─── Swiss Pulse choreography ─────────────────────────────────── -->
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js" defer></script>
 <script defer>
 (() => {
   const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -2089,19 +2095,7 @@
     if (!window.gsap) return;
     const gsap = window.gsap;
 
-    // Lenis smooth scroll (with ScrollTrigger integration if available)
-    if (!prefersReduced && window.Lenis) {
-      const lenis = new Lenis({ lerp: 0.1, duration: 1.1, smoothWheel: true });
-      window.__lenis = lenis;
-      if (window.ScrollTrigger) {
-        lenis.on('scroll', window.ScrollTrigger.update);
-        gsap.ticker.add((time) => { lenis.raf(time * 1000); });
-        gsap.ticker.lagSmoothing(0);
-      } else {
-        const raf = (t) => { lenis.raf(t); requestAnimationFrame(raf); };
-        requestAnimationFrame(raf);
-      }
-    }
+    // Native scroll — Lenis removed (felt sluggish on long page). ScrollTrigger uses window scroll.
 
     // ── Prep underline draw ───────────────────────────────────────────
     document.querySelectorAll('.sp-hero-title .sp-underline path').forEach(p => {
