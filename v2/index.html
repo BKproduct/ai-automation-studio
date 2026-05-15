@@ -861,6 +861,71 @@
       /* Show hamburger */
       .hamburger { display: flex; }
     }
+    /* ─── Mobile menu drawer (fullscreen overlay) ─── */
+    .mobile-menu {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: var(--sp-paper);
+      z-index: 150;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .25s ease;
+    }
+    body.nav-open .mobile-menu {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .mobile-menu-inner {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      display: flex; flex-direction: column; gap: 28px;
+      text-align: center;
+      width: auto;
+      min-width: 240px;
+    }
+    .mm-link {
+      font-family: 'Geist', sans-serif;
+      font-size: 26px;
+      font-weight: 600;
+      color: var(--sp-ink);
+      text-decoration: none;
+      letter-spacing: -.01em;
+      transition: color .2s ease;
+    }
+    .mm-link:hover { color: var(--sp-accent); }
+    .mm-cta {
+      margin-top: 16px;
+      display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+      background: var(--sp-ink); color: var(--sp-paper);
+      padding: 14px 28px;
+      font-family: 'Geist', sans-serif;
+      font-size: 14px; font-weight: 500;
+      text-decoration: none;
+      border: 1px solid var(--sp-ink);
+      transition: background .2s, color .2s;
+    }
+    .mm-cta:hover { background: var(--sp-accent); border-color: var(--sp-accent); }
+
+    /* Hamburger as button — animates to X when nav-open */
+    .hamburger {
+      background: transparent; border: 0; cursor: pointer;
+      padding: 6px;
+      transition: transform .25s ease;
+      position: relative;
+      z-index: 200;
+    }
+    .hamburger span {
+      transition: transform .25s ease, opacity .2s ease;
+      background: var(--sp-ink) !important;
+    }
+    body.nav-open .hamburger span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    body.nav-open .hamburger span:nth-child(2) { opacity: 0; }
+    body.nav-open .hamburger span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* Lock body scroll when menu is open */
+    body.nav-open { overflow: hidden; }
+
     @media (max-width: 420px) {
       /* Tightest phones: tighten everything more */
       nav#navbar .container { padding: 0 14px !important; }
@@ -1180,23 +1245,26 @@
       transform: none !important;
       box-shadow: none !important;
     }
-    .ind-card:hover .ind-name { color: var(--sp-paper); }
-    .ind-card:hover .ind-desc { color: #9A9A95; }
+    .ind-card:hover .ind-name { color: var(--sp-paper) !important; }
+    .ind-card:hover .ind-desc { color: #C9C5BC !important; } /* brighter for readability on ink */
     .ind-emoji {
       font-size: 28px !important;
-      filter: grayscale(1); opacity: .8;
+      filter: grayscale(1); opacity: .85;
       transition: filter .25s, opacity .25s;
     }
     .ind-card:hover .ind-emoji { filter: none; opacity: 1; }
     .ind-name {
       color: var(--sp-ink) !important;
       font-family: 'Geist', sans-serif !important;
-      font-size: 15px !important; font-weight: 600 !important;
+      font-size: 15.5px !important; font-weight: 600 !important;
+      letter-spacing: -.005em;
+      margin-bottom: 8px;
       transition: color .25s;
     }
     .ind-desc {
-      color: var(--sp-muted) !important;
-      font-size: 12.5px !important;
+      color: var(--sp-body) !important;
+      font-size: 13.5px !important;
+      line-height: 1.55;
       transition: color .25s;
     }
 
@@ -1254,20 +1322,35 @@
       background: var(--sp-ink); padding: 36px 28px;
       display: flex; flex-direction: column; gap: 8px;
     }
-    .res-num, .result-num, .results-grid .num, .res-grid strong {
+    .res-num {
       font-family: 'Geist Mono', monospace !important;
       color: var(--sp-paper) !important;
       font-size: clamp(36px, 4vw, 56px) !important;
       font-weight: 500 !important;
       letter-spacing: -.02em !important;
       font-variant-numeric: tabular-nums;
+      line-height: 1 !important;
+      margin-bottom: 8px !important;
     }
-    .res-label, .result-label, .res-grid small, .res-grid span {
+    /* res-label > strong = the headline label ("Productivity"); res-label > span = sub-caption */
+    .res-label strong {
+      display: block !important;
+      font-family: 'Geist', sans-serif !important;
+      color: var(--sp-paper) !important;
+      font-size: 15px !important;
+      font-weight: 600 !important;
+      letter-spacing: -.005em !important;
+      margin-bottom: 4px !important;
+      text-transform: none !important;
+    }
+    .res-label > span,
+    .res-label span:not(:first-child) {
       font-family: 'Geist Mono', monospace !important;
-      color: #9A9A95 !important;
+      color: #BEB6A7 !important;
       font-size: 11px !important;
-      letter-spacing: .18em !important;
+      letter-spacing: .14em !important;
       text-transform: uppercase;
+      line-height: 1.45;
     }
 
     /* ═══ CTA — ink canvas, accent bar ═══ */
@@ -1413,12 +1496,26 @@
         </a>
       </div>
 
-      <div class="hamburger" id="hamburger">
+      <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false" type="button">
         <span></span><span></span><span></span>
-      </div>
+      </button>
     </div>
   </div>
 </nav>
+
+<!-- Mobile menu drawer -->
+<div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+  <nav class="mobile-menu-inner">
+    <a href="#services" class="mm-link"><span class="en">Services</span><span class="ru">Услуги</span></a>
+    <a href="#industries" class="mm-link"><span class="en">Industries</span><span class="ru">Отрасли</span></a>
+    <a href="#process" class="mm-link"><span class="en">Process</span><span class="ru">Процесс</span></a>
+    <a href="#cta" class="mm-link"><span class="en">Contact</span><span class="ru">Контакты</span></a>
+    <a href="https://calendly.com/dmir017" target="_blank" class="mm-cta">
+      <span class="en">Book a free call</span><span class="ru">Записаться на звонок</span>
+      <span aria-hidden="true">→</span>
+    </a>
+  </nav>
+</div>
 
 
 <!-- ═══════════════════════════════ HERO — Swiss Pulse ════════════════════════════════ -->
@@ -2284,6 +2381,30 @@
       }
     });
   });
+
+  // Mobile menu (hamburger)
+  (() => {
+    const burger = document.getElementById('hamburger');
+    const menu   = document.getElementById('mobile-menu');
+    if (!burger || !menu) return;
+    const close = () => {
+      document.body.classList.remove('nav-open');
+      burger.setAttribute('aria-expanded', 'false');
+      menu.setAttribute('aria-hidden', 'true');
+    };
+    const open = () => {
+      document.body.classList.add('nav-open');
+      burger.setAttribute('aria-expanded', 'true');
+      menu.setAttribute('aria-hidden', 'false');
+    };
+    burger.addEventListener('click', () => {
+      document.body.classList.contains('nav-open') ? close() : open();
+    });
+    // Close on any menu-link click
+    menu.querySelectorAll('a').forEach(a => a.addEventListener('click', close));
+    // Close on Esc
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+  })();
 </script>
 
 <!-- ─── Agent chat cycle (Swiss Pulse hero visual) ─────────────── -->
