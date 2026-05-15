@@ -142,6 +142,12 @@
       grid-template-columns: 1fr 1fr;
       gap: 16px;
     }
+    .field.hidden { display: none; }
+    .field-nested {
+      margin-top: -8px;
+      padding-left: 14px;
+      border-left: 2px solid var(--accent);
+    }
     @media (max-width: 600px) {
       .meta-row { grid-template-columns: 1fr; }
       .toolbar { position: static; }
@@ -233,7 +239,7 @@
         </label>
         <label class="field">
           <span>8. Язык лендинга</span>
-          <select name="q08_language">
+          <select name="q08_language" id="q08Language">
             <option value="">— выберите —</option>
             <option value="ru">Русский</option>
             <option value="en">English</option>
@@ -241,6 +247,11 @@
             <option value="de">Deutsch</option>
             <option value="multi">Несколько языков</option>
           </select>
+        </label>
+        <label class="field field-nested hidden" id="q08LanguagesWrap">
+          <span>Какие языки?</span>
+          <small>Укажите все языки лендинга через запятую.</small>
+          <input type="text" name="q08_languages_detail" id="q08LanguagesDetail" placeholder="Например: русский, английский, немецкий" />
         </label>
       </section>
 
@@ -431,6 +442,7 @@
       q06_proof: '6. Доказательства',
       q07_forbidden: '7. Запрещённые формулировки',
       q08_language: '8. Язык',
+      q08_languages_detail: '8a. Языки (если несколько)',
       q09_brand: '9. Бренд',
       q10_audience: '10. Аудитория',
       q11_category: '11. Категория',
@@ -491,6 +503,7 @@
         const el = form.elements.namedItem(key);
         if (el) el.value = val;
       });
+      syncLanguageFields();
     }
 
     function encodePayload(data) {
@@ -514,6 +527,16 @@
       return { url, enc };
     }
 
+    function formatLanguageAnswer(data) {
+      const main = (data.q08_language || '').trim();
+      const detail = (data.q08_languages_detail || '').trim();
+      if (main === 'multi') {
+        return detail ? `Несколько языков: ${detail}` : 'Несколько языков (_список не указан_)';
+      }
+      const labels = { ru: 'Русский', en: 'English', 'en-gb': 'English (UK)', de: 'Deutsch' };
+      return labels[main] || main || '';
+    }
+
     function toMarkdown(data) {
       const lines = [
         '# Бриф на конверсионный лендинг',
@@ -526,13 +549,25 @@
         '',
       ];
       Object.keys(LABELS).forEach((key) => {
-        const val = (data[key] || '').trim();
+        if (key === 'q08_languages_detail') return;
+        let val = (data[key] || '').trim();
+        if (key === 'q08_language') val = formatLanguageAnswer(data);
         lines.push(`## ${LABELS[key]}`);
         lines.push('');
         lines.push(val || '_не заполнено_');
         lines.push('');
       });
       return lines.join('\n');
+    }
+
+    function syncLanguageFields() {
+      const select = document.getElementById('q08Language');
+      const wrap = document.getElementById('q08LanguagesWrap');
+      const detail = document.getElementById('q08LanguagesDetail');
+      if (!select || !wrap) return;
+      const multi = select.value === 'multi';
+      wrap.classList.toggle('hidden', !multi);
+      if (detail) detail.required = multi;
     }
 
     function setStatus(msg, type) {
@@ -558,6 +593,10 @@
     }
 
     form.addEventListener('input', autosave);
+    document.getElementById('q08Language')?.addEventListener('change', () => {
+      syncLanguageFields();
+      autosave();
+    });
 
     document.getElementById('btnLink').addEventListener('click', async () => {
       const data = collectData();
@@ -604,6 +643,7 @@
         if (saved) applyData(JSON.parse(saved));
       } catch (_) {}
     }
+    syncLanguageFields();
   </script>
 </body>
 </html>
