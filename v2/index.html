@@ -2212,11 +2212,9 @@
   // Run on load to hide .ru spans by default
   document.addEventListener('DOMContentLoaded', () => {
     setLang('en');
-    // Safety fallback: if GSAP fails to run (slow/blocked CDN, JS error, very slow mobile),
-    // ensure counter text shows the final value instead of "0".
-    // The hero timeline will overwrite from 0 -> target when it animates.
+    // Safety fallback: only if GSAP totally fails (blocked CDN / JS error). 6s gives slow
+    // mobile networks time for the normal timeline + counter tween to complete first.
     setTimeout(() => {
-      // Only run if GSAP hasn't started the count yet (text still at initial "0" / "0.0")
       document.querySelectorAll('.sp-stat-num [data-count], .sp-loop-num[data-count]').forEach(el => {
         const current = el.textContent.trim();
         if (current === '0' || current === '0.0' || current === '') {
@@ -2225,7 +2223,7 @@
           el.textContent = target.toFixed(decimals);
         }
       });
-    }, 3000);
+    }, 6000);
   });
 
   // Scroll shadow on nav
@@ -2272,24 +2270,9 @@
       p.style.strokeDashoffset = len;
     });
 
-    if (prefersReduced) {
-      // Just reveal everything statically
-      gsap.set([
-        '.sp-kicker', '.sp-hero-title .sp-word > span',
-        '.sp-hero-sub', '.sp-hero-ctas .sp-btn',
-        '.sp-hero-stats > div', '.sp-loop-label', '.sp-loop-center',
-        '.sp-mock-ticker', '.sp-loop-guide', '.sp-loop-runner'
-      ], { opacity: 1, y: 0, scale: 1 });
-      gsap.set('.sp-loop-arc, .sp-hero-title .sp-underline path', { strokeDashoffset: 0 });
-      // Counter targets: set to final value (no animation)
-      document.querySelectorAll('.sp-stat-num [data-count], .sp-loop-num[data-count]').forEach(el => {
-        const target = parseFloat(el.dataset.count);
-        const decimals = (el.dataset.count.split('.')[1] || '').length;
-        el.textContent = target.toFixed(decimals);
-      });
-      document.querySelector('.sp-hero-visual')?.classList.add('sp-anim-ready');
-      return;
-    }
+    // NOTE: prefers-reduced-motion no longer short-circuits the hero timeline.
+    // Hero entrance + counter rolls are short and light — same behaviour on mobile/desktop.
+    // CSS keyframes for orbit dot and idle floats still honour @media (prefers-reduced-motion).
 
     // ── Initial state ─────────────────────────────────────────────────
     gsap.set('.sp-kicker', { opacity: 0, y: 14 });
