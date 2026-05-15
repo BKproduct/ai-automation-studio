@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Бриф на конверсионный лендинг</title>
+  <meta name="description" content="Заполните бриф и отправьте ссылку с ответами заказчику лендинга." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/lz-string@1.5.0/libs/lz-string.min.js"></script>
+  <style>
+    :root {
+      --paper: #fafaf7;
+      --ink: #0a0a0a;
+      --muted: #6b6b68;
+      --rule: #e5e4de;
+      --accent: #ff3d2e;
+      --accent-soft: rgba(255, 61, 46, 0.08);
+      --ok: #16a34a;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Geist", system-ui, sans-serif;
+      background: var(--paper);
+      color: var(--ink);
+      line-height: 1.55;
+      font-size: 16px;
+    }
+    .wrap { max-width: 760px; margin: 0 auto; padding: 48px 24px 120px; }
+    .kicker {
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+  h1 {
+      font-size: clamp(28px, 5vw, 40px);
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      margin: 0 0 16px;
+      font-weight: 700;
+    }
+    .lead { color: var(--muted); margin: 0 0 28px; max-width: 62ch; }
+    .steps {
+      display: grid;
+      gap: 10px;
+      margin: 0 0 32px;
+      padding: 20px;
+      border: 1px solid var(--rule);
+      background: #fff;
+    }
+    .steps li { margin-left: 18px; }
+    .steps strong { color: var(--ink); }
+    .toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 14px 0;
+      margin-bottom: 24px;
+      background: linear-gradient(var(--paper) 70%, transparent);
+      border-bottom: 1px solid var(--rule);
+    }
+    button, .btn-link {
+      appearance: none;
+      border: 1px solid var(--ink);
+      background: var(--ink);
+      color: #fff;
+      font: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 12px 18px;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+    button.secondary {
+      background: transparent;
+      color: var(--ink);
+    }
+    button:hover, .btn-link:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
+    button:disabled { opacity: 0.45; cursor: not-allowed; }
+    .status {
+      flex: 1 1 100%;
+      font-size: 13px;
+      color: var(--muted);
+      min-height: 1.2em;
+    }
+    .status.ok { color: var(--ok); }
+    .status.err { color: var(--accent); }
+    section.block {
+      margin-bottom: 40px;
+      padding-top: 8px;
+      border-top: 1px solid var(--rule);
+    }
+    section.block h2 {
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      margin: 24px 0 20px;
+      font-weight: 600;
+    }
+    label.field {
+      display: block;
+      margin-bottom: 22px;
+    }
+    label.field span {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 6px;
+      font-size: 15px;
+    }
+    label.field small {
+      display: block;
+      color: var(--muted);
+      font-weight: 400;
+      margin-bottom: 8px;
+      font-size: 13px;
+    }
+    input[type="text"],
+    input[type="url"],
+    input[type="email"],
+    textarea,
+    select {
+      width: 100%;
+      border: 1px solid var(--rule);
+      background: #fff;
+      padding: 12px 14px;
+      font: inherit;
+      color: var(--ink);
+      border-radius: 0;
+    }
+    textarea { min-height: 88px; resize: vertical; }
+    textarea.tall { min-height: 120px; }
+    .meta-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 600px) {
+      .meta-row { grid-template-columns: 1fr; }
+      .toolbar { position: static; }
+    }
+    .filled-banner {
+      display: none;
+      padding: 14px 16px;
+      margin-bottom: 24px;
+      border: 1px solid var(--accent);
+      background: var(--accent-soft);
+      font-size: 14px;
+    }
+    .filled-banner.show { display: block; }
+    footer {
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid var(--rule);
+      font-size: 13px;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap" id="app">
+    <p class="kicker">Landing brief · AI Automation Studio</p>
+    <h1>Бриф на конверсионный лендинг</h1>
+    <p class="lead">Заполните поля ниже. Нажмите <strong>«Получить ссылку»</strong> и отправьте её заказчику. По ссылке будут видны все ваши ответы — ничего отдельно прикреплять не нужно.</p>
+
+    <ol class="steps">
+      <li><strong>Заполните</strong> все блоки (можно частично — пометьте «уточним»).</li>
+      <li><strong>Нажмите «Получить ссылку»</strong> → скопируйте из буфера.</li>
+      <li><strong>Отправьте ссылку</strong> в Telegram / email заказчику лендинга.</li>
+    </ol>
+
+    <div id="filledBanner" class="filled-banner" role="status">
+      Открыта ссылка с уже заполненными ответами. Можно править и снова нажать «Получить ссылку».
+    </div>
+
+    <div class="toolbar">
+      <button type="button" id="btnLink">Получить ссылку</button>
+      <button type="button" class="secondary" id="btnMd">Скачать .md</button>
+      <button type="button" class="secondary" id="btnClear">Очистить</button>
+      <p id="status" class="status" aria-live="polite"></p>
+    </div>
+
+    <form id="briefForm" autocomplete="on">
+      <label class="field">
+        <span>Контакт (имя + компания)</span>
+        <input type="text" name="contact" placeholder="Иван Петров, ООО Пример" />
+      </label>
+      <label class="field">
+        <span>Email для связи</span>
+        <input type="email" name="email" placeholder="you@company.com" />
+      </label>
+
+      <section class="block">
+        <h2>A · Обязательный минимум</h2>
+
+        <label class="field">
+          <span>1. Описание продукта / услуги</span>
+          <small>Что продаёте, формат, 3–5 предложений.</small>
+          <textarea name="q01_product" class="tall"></textarea>
+        </label>
+        <label class="field">
+          <span>2. Главный обещанный результат</span>
+          <small>Одна фраза, желательно с цифрой или сроком.</small>
+          <input type="text" name="q02_outcome" />
+        </label>
+        <label class="field">
+          <span>3. Для кого НЕ подходит</span>
+          <textarea name="q03_not_for"></textarea>
+        </label>
+        <label class="field">
+          <span>4. Главные конкуренты / заменители</span>
+          <textarea name="q04_competitors"></textarea>
+        </label>
+        <label class="field">
+          <span>5. Цена, триал, гарантия</span>
+          <textarea name="q05_pricing"></textarea>
+        </label>
+        <label class="field">
+          <span>6. Самое сильное доказательство</span>
+          <small>Кейсы, цифры, отзывы — что можно показать публично.</small>
+          <textarea name="q06_proof" class="tall"></textarea>
+        </label>
+        <label class="field">
+          <span>7. Запрещённые формулировки</span>
+          <textarea name="q07_forbidden"></textarea>
+        </label>
+        <label class="field">
+          <span>8. Язык лендинга</span>
+          <select name="q08_language">
+            <option value="">— выберите —</option>
+            <option value="ru">Русский</option>
+            <option value="en">English</option>
+            <option value="en-gb">English (UK)</option>
+            <option value="de">Deutsch</option>
+            <option value="multi">Несколько языков</option>
+          </select>
+        </label>
+      </section>
+
+      <section class="block">
+        <h2>B · Позиционирование и оффер</h2>
+
+        <label class="field">
+          <span>9. Название бренда (как на сайте)</span>
+          <input type="text" name="q09_brand" />
+        </label>
+        <label class="field">
+          <span>10. Целевая аудитория</span>
+          <small>Роль, география, ситуация, «застрял в X → хочет Y».</small>
+          <textarea name="q10_audience" class="tall"></textarea>
+        </label>
+        <label class="field">
+          <span>11. Категория (как клиент ищет решение)</span>
+          <input type="text" name="q11_category" placeholder="например: агентство автоматизации, онлайн-курс…" />
+        </label>
+        <label class="field">
+          <span>12. Отличие от конкурентов (1–3 пункта)</span>
+          <textarea name="q12_differentiator"></textarea>
+        </label>
+        <label class="field">
+          <span>13. Что входит в продукт</span>
+          <textarea name="q13_includes" class="tall"></textarea>
+        </label>
+        <label class="field">
+          <span>14. Бонусы</span>
+          <textarea name="q14_bonuses"></textarea>
+        </label>
+        <label class="field">
+          <span>15. Гарантии (что реально готовы подписать)</span>
+          <textarea name="q15_guarantees"></textarea>
+        </label>
+        <label class="field">
+          <span>16. Срочность / дефицит (только реальный)</span>
+          <textarea name="q16_scarcity"></textarea>
+        </label>
+        <label class="field">
+          <span>17. Механизм оплаты / субсидии (если есть)</span>
+          <small>Опишите в 3 шагах, если применимо.</small>
+          <textarea name="q17_funding"></textarea>
+        </label>
+      </section>
+
+      <section class="block">
+        <h2>C · Голос, боли, proof</h2>
+
+        <label class="field">
+          <span>18. Лицо бренда на лендинге</span>
+          <input type="text" name="q18_face" placeholder="основатель / эксперт / команда" />
+        </label>
+        <label class="field">
+          <span>19. История основателя (кратко)</span>
+          <small>Откуда → что сломалось → инсайт → что построили → результат.</small>
+          <textarea name="q19_story" class="tall"></textarea>
+        </label>
+        <label class="field">
+          <span>20. Тон коммуникации</span>
+          <textarea name="q20_tone"></textarea>
+        </label>
+        <label class="field">
+          <span>21. Топ-5 болей (дословные фразы клиентов)</span>
+          <textarea name="q21_pains" class="tall"></textarea>
+        </label>
+        <label class="field">
+          <span>22. Топ возражений + как отвечаете</span>
+          <textarea name="q22_objections" class="tall"></textarea>
+        </label>
+        <label class="field">
+          <span>23. Триггер покупки</span>
+          <textarea name="q23_trigger"></textarea>
+        </label>
+        <label class="field">
+          <span>24. Proof — что уже есть</span>
+          <textarea name="q24_proof_have" class="tall"></textarea>
+        </label>
+        <label class="field">
+          <span>25. Proof — что соберёте за 2 недели</span>
+          <textarea name="q25_proof_soon"></textarea>
+        </label>
+        <label class="field">
+          <span>26. Чего нет и нельзя выдумывать</span>
+          <textarea name="q26_proof_no"></textarea>
+        </label>
+      </section>
+
+      <section class="block">
+        <h2>D · Воронка, визуал, legal</h2>
+
+        <label class="field">
+          <span>27. Главное действие на лендинге (CTA)</span>
+          <input type="text" name="q27_cta" placeholder="заявка / звонок 15 мин / WhatsApp…" />
+        </label>
+        <label class="field">
+          <span>28. Что происходит после клика (3 шага)</span>
+          <textarea name="q28_after_click"></textarea>
+        </label>
+        <label class="field">
+          <span>29. Поля формы</span>
+          <input type="text" name="q29_form_fields" placeholder="имя, телефон, email…" />
+        </label>
+        <label class="field">
+          <span>30. Куда падают лиды</span>
+          <textarea name="q30_leads"></textarea>
+        </label>
+        <label class="field">
+          <span>31. Референсы (ссылки «нравится»)</span>
+          <textarea name="q31_refs"></textarea>
+        </label>
+        <label class="field">
+          <span>32. Анти-референсы</span>
+          <textarea name="q32_antirefs"></textarea>
+        </label>
+        <label class="field">
+          <span>33. Ассеты (логотип, фото, brand book)</span>
+          <small>Ссылки на Drive/Dropbox или «пришлю отдельно».</small>
+          <textarea name="q33_assets"></textarea>
+        </label>
+        <label class="field">
+          <span>34. Hero-визуал</span>
+          <input type="text" name="q34_hero_visual" />
+        </label>
+        <label class="field">
+          <span>35. Юр. данные (компания, адрес, страна)</span>
+          <textarea name="q35_legal"></textarea>
+        </label>
+        <label class="field">
+          <span>36. Legal-страницы (privacy, terms…)</span>
+          <textarea name="q36_legal_pages"></textarea>
+        </label>
+        <label class="field">
+          <span>37. Домен</span>
+          <input type="text" name="q37_domain" />
+        </label>
+        <label class="field">
+          <span>38. Аналитика</span>
+          <input type="text" name="q38_analytics" placeholder="Meta Pixel, GA4, PostHog…" />
+        </label>
+      </section>
+
+      <section class="block">
+        <h2>E · По желанию</h2>
+        <label class="field">
+          <span>39. 3 портрета клиента (если есть)</span>
+          <textarea name="q39_personas" class="tall"></textarea>
+        </label>
+        <label class="field">
+          <span>40. Lead magnet</span>
+          <textarea name="q40_lead_magnet"></textarea>
+        </label>
+        <label class="field">
+          <span>41. FAQ (вопрос → ответ)</span>
+          <textarea name="q41_faq" class="tall"></textarea>
+        </label>
+        <label class="field">
+          <span>42. Конкуренты для сравнения (URL)</span>
+          <textarea name="q42_comp_urls"></textarea>
+        </label>
+        <label class="field">
+          <span>43. Метрики успеха лендинга</span>
+          <textarea name="q43_metrics"></textarea>
+        </label>
+        <label class="field">
+          <span>44. Всё остальное</span>
+          <textarea name="q44_extra"></textarea>
+        </label>
+      </section>
+    </form>
+
+    <footer>
+      Шаблон: методология landing-page-builder (Kumar / AI Creo). Пустая форма:
+      <a id="emptyLink" href="">ссылка</a>
+      · Last updated: 2026-05-15
+    </footer>
+  </div>
+
+  <script>
+    const FORM_ID = 'landing-brief-v1';
+    const HASH_PREFIX = '#d=';
+    const LABELS = {
+      contact: 'Контакт',
+      email: 'Email',
+      q01_product: '1. Описание продукта',
+      q02_outcome: '2. Главный результат',
+      q03_not_for: '3. Не подходит для',
+      q04_competitors: '4. Конкуренты',
+      q05_pricing: '5. Цена / гарантия',
+      q06_proof: '6. Доказательства',
+      q07_forbidden: '7. Запрещённые формулировки',
+      q08_language: '8. Язык',
+      q09_brand: '9. Бренд',
+      q10_audience: '10. Аудитория',
+      q11_category: '11. Категория',
+      q12_differentiator: '12. Отличие',
+      q13_includes: '13. Состав продукта',
+      q14_bonuses: '14. Бонусы',
+      q15_guarantees: '15. Гарантии',
+      q16_scarcity: '16. Срочность',
+      q17_funding: '17. Механизм оплаты',
+      q18_face: '18. Лицо бренда',
+      q19_story: '19. История основателя',
+      q20_tone: '20. Тон',
+      q21_pains: '21. Боли',
+      q22_objections: '22. Возражения',
+      q23_trigger: '23. Триггер покупки',
+      q24_proof_have: '24. Proof есть',
+      q25_proof_soon: '25. Proof скоро',
+      q26_proof_no: '26. Proof нельзя',
+      q27_cta: '27. CTA',
+      q28_after_click: '28. После клика',
+      q29_form_fields: '29. Поля формы',
+      q30_leads: '30. Куда лиды',
+      q31_refs: '31. Референсы',
+      q32_antirefs: '32. Анти-референсы',
+      q33_assets: '33. Ассеты',
+      q34_hero_visual: '34. Hero-визуал',
+      q35_legal: '35. Юр. данные',
+      q36_legal_pages: '36. Legal-страницы',
+      q37_domain: '37. Домен',
+      q38_analytics: '38. Аналитика',
+      q39_personas: '39. Персоны',
+      q40_lead_magnet: '40. Lead magnet',
+      q41_faq: '41. FAQ',
+      q42_comp_urls: '42. URL конкурентов',
+      q43_metrics: '43. Метрики',
+      q44_extra: '44. Прочее',
+    };
+
+    const form = document.getElementById('briefForm');
+    const status = document.getElementById('status');
+    const filledBanner = document.getElementById('filledBanner');
+    const emptyLink = document.getElementById('emptyLink');
+    const baseUrl = location.origin + location.pathname;
+
+    emptyLink.href = baseUrl;
+    emptyLink.textContent = baseUrl;
+
+    function collectData() {
+      const data = { _v: 1, _saved: new Date().toISOString() };
+      new FormData(form).forEach((val, key) => { data[key] = String(val).trim(); });
+      return data;
+    }
+
+    function applyData(data) {
+      if (!data) return;
+      Object.entries(data).forEach(([key, val]) => {
+        if (key.startsWith('_')) return;
+        const el = form.elements.namedItem(key);
+        if (el) el.value = val;
+      });
+    }
+
+    function encodePayload(data) {
+      const json = JSON.stringify(data);
+      return LZString.compressToEncodedURIComponent(json);
+    }
+
+    function decodePayload(encoded) {
+      try {
+        const json = LZString.decompressFromEncodedURIComponent(encoded);
+        if (!json) return null;
+        return JSON.parse(json);
+      } catch {
+        return null;
+      }
+    }
+
+    function buildShareUrl(data) {
+      const enc = encodePayload(data);
+      const url = baseUrl + HASH_PREFIX + enc;
+      return { url, enc };
+    }
+
+    function toMarkdown(data) {
+      const lines = [
+        '# Бриф на конверсионный лендинг',
+        '',
+        `**Заполнено:** ${data._saved || '—'}`,
+        `**Контакт:** ${data.contact || '—'}`,
+        `**Email:** ${data.email || '—'}`,
+        '',
+        '---',
+        '',
+      ];
+      Object.keys(LABELS).forEach((key) => {
+        const val = (data[key] || '').trim();
+        lines.push(`## ${LABELS[key]}`);
+        lines.push('');
+        lines.push(val || '_не заполнено_');
+        lines.push('');
+      });
+      return lines.join('\n');
+    }
+
+    function setStatus(msg, type) {
+      status.textContent = msg;
+      status.className = 'status' + (type ? ' ' + type : '');
+    }
+
+    function loadFromHash() {
+      if (!location.hash.startsWith(HASH_PREFIX)) return false;
+      const encoded = location.hash.slice(HASH_PREFIX.length);
+      const data = decodePayload(encoded);
+      if (!data) return false;
+      applyData(data);
+      filledBanner.classList.add('show');
+      setStatus('Ответы загружены из ссылки.', 'ok');
+      return true;
+    }
+
+    function autosave() {
+      try {
+        localStorage.setItem(FORM_ID, JSON.stringify(collectData()));
+      } catch (_) {}
+    }
+
+    form.addEventListener('input', autosave);
+
+    document.getElementById('btnLink').addEventListener('click', async () => {
+      const data = collectData();
+      autosave();
+      const { url } = buildShareUrl(data);
+      if (url.length > 12000) {
+        setStatus('Ссылка слишком длинная — скачайте .md и отправьте файл.', 'err');
+        return;
+      }
+      try {
+        await navigator.clipboard.writeText(url);
+        history.replaceState(null, '', url);
+        setStatus('Ссылка скопирована в буфер. Отправьте её заказчику.', 'ok');
+      } catch {
+        prompt('Скопируйте ссылку:', url);
+        history.replaceState(null, '', url);
+        setStatus('Скопируйте ссылку из окна.', 'ok');
+      }
+    });
+
+    document.getElementById('btnMd').addEventListener('click', () => {
+      const md = toMarkdown(collectData());
+      const blob = new Blob([md], { type: 'text/markdown;charset=utf-8' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `landing-brief-${(collectData().q09_brand || 'client').replace(/\s+/g, '-').slice(0, 40)}.md`;
+      a.click();
+      URL.revokeObjectURL(a.href);
+      setStatus('Файл .md скачан.', 'ok');
+    });
+
+    document.getElementById('btnClear').addEventListener('click', () => {
+      if (!confirm('Очистить все поля?')) return;
+      form.reset();
+      localStorage.removeItem(FORM_ID);
+      history.replaceState(null, '', baseUrl);
+      filledBanner.classList.remove('show');
+      setStatus('Форма очищена.', 'ok');
+    });
+
+    if (!loadFromHash()) {
+      try {
+        const saved = localStorage.getItem(FORM_ID);
+        if (saved) applyData(JSON.parse(saved));
+      } catch (_) {}
+    }
+  </script>
+</body>
+</html>
