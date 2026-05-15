@@ -808,53 +808,70 @@
 
     /* ─── Mobile nav stabilisation (prevent layout jump on EN ↔ RU toggle) ─── */
     @media (max-width: 720px) {
-      /* Logo: smaller, single line */
+      /* Container padding tighter on mobile so we have full width to play with */
+      nav#navbar .container { padding: 0 18px !important; }
+
+      /* nav-inner is flex space-between; ensure inner clusters have breathing room */
+      .nav-inner { gap: 12px; }
+
+      /* Logo: replace 'AI Automation Studio' with shorter 'AI Studio' on mobile */
       .nav-logo {
-        font-size: 13px !important;
+        font-size: 0 !important; /* hide native text node */
         gap: 8px !important;
         white-space: nowrap;
+        min-width: 0;
+        flex-shrink: 0;
       }
-      .nav-logo svg { width: 26px !important; height: 26px !important; }
+      .nav-logo svg { width: 24px !important; height: 24px !important; flex-shrink: 0; }
+      .nav-logo::after {
+        content: 'AI Studio';
+        font-family: 'Geist', sans-serif;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--sp-ink);
+        letter-spacing: -.005em;
+      }
 
       /* Lang toggle: wider per button so 'RU' is fully visible, never clipped */
       .lang-toggle { flex-shrink: 0; }
       .lang-btn {
-        min-width: 36px !important;
+        min-width: 32px !important;
         text-align: center;
-        padding: 8px 11px !important;
+        padding: 7px 9px !important;
         font-size: 11px !important;
-        letter-spacing: .16em !important;
+        letter-spacing: .14em !important;
       }
 
       /* Right cluster: tighter, consistent spacing, vertical alignment */
-      .nav-right { gap: 10px !important; align-items: center; }
+      .nav-right { gap: 8px !important; align-items: center; flex-shrink: 0; }
 
       /* Compact "Book a Call" — hide emoji, shorter padding, nowrap */
       nav#navbar .btn.btn-primary {
-        height: 36px !important;
-        padding: 0 12px !important;
-        font-size: 12px !important;
+        height: 34px !important;
+        padding: 0 10px !important;
         font-weight: 500 !important;
         white-space: nowrap;
         flex-shrink: 0;
+        font-size: 0 !important; /* hide text node 📅 */
       }
-      /* Strip the 📅 emoji on mobile to free horizontal space */
-      nav#navbar .btn.btn-primary { font-size: 0 !important; }
       nav#navbar .btn.btn-primary > span,
       nav#navbar .btn.btn-primary > .en,
-      nav#navbar .btn.btn-primary > .ru { font-size: 12px !important; }
+      nav#navbar .btn.btn-primary > .ru { font-size: 11.5px !important; }
 
       /* Show hamburger */
       .hamburger { display: flex; }
     }
     @media (max-width: 420px) {
-      /* Tightest phones: shrink button further, ensure everything fits */
-      nav#navbar .btn.btn-primary {
-        padding: 0 10px !important;
-      }
+      /* Tightest phones: tighten everything more */
+      nav#navbar .container { padding: 0 14px !important; }
+      .nav-inner { gap: 8px; height: 64px; }
+      nav#navbar .btn.btn-primary { padding: 0 8px !important; height: 32px !important; }
       nav#navbar .btn.btn-primary > span { font-size: 11px !important; }
-      .nav-logo { font-size: 12px !important; }
-      .nav-right { gap: 8px !important; }
+      .nav-logo { gap: 7px !important; }
+      .nav-logo::after { font-size: 12.5px; }
+      .nav-logo svg { width: 22px !important; height: 22px !important; }
+      .lang-btn { min-width: 28px !important; padding: 6px 7px !important; font-size: 10.5px !important; }
+      .nav-right { gap: 6px !important; }
     }
 
     /* ═══════════════════════════════════════════════════════════════════
@@ -1258,9 +1275,11 @@
     .cta-box {
       background: var(--sp-ink) !important;
       border-radius: 0 !important;
-      padding: 80px !important;
+      padding: 72px !important;
       position: relative;
       overflow: hidden;
+      max-width: 100%;
+      box-sizing: border-box;
     }
     .cta-box::before {
       content: '' !important;
@@ -1272,11 +1291,58 @@
     }
     .cta-title {
       font-family: 'Geist', sans-serif !important;
-      font-size: clamp(36px, 4.2vw, 56px) !important;
+      font-size: clamp(28px, 4.2vw, 56px) !important;
       font-weight: 700 !important;
       letter-spacing: -.03em !important;
       color: var(--sp-paper) !important;
-      line-height: 1.05 !important;
+      line-height: 1.08 !important;
+      word-break: break-word;
+      overflow-wrap: break-word;
+      hyphens: auto;
+    }
+    @media (max-width: 720px) {
+      #cta { padding: 56px 0; }
+      .cta-box {
+        padding: 32px 24px !important;
+        text-align: center;
+      }
+      .cta-title {
+        font-size: clamp(22px, 5.6vw, 32px) !important;
+        hyphens: manual !important;
+        word-break: normal !important;
+        text-align: center;
+        margin-left: auto; margin-right: auto;
+        max-width: 18ch;
+      }
+      .cta-sub {
+        font-size: 14.5px !important;
+        text-align: center;
+        margin: 14px auto 28px !important;
+        max-width: 32ch;
+      }
+      .cta-btns {
+        justify-content: center !important;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px !important;
+      }
+      .cta-btns .btn { width: auto; padding: 0 22px !important; }
+      /* Ghost button must be visible on the dark CTA background */
+      .cta-box .btn-outline {
+        color: var(--sp-paper) !important;
+        border-color: var(--sp-paper) !important;
+        background: transparent !important;
+      }
+      .cta-box .btn-outline:hover {
+        background: var(--sp-paper) !important;
+        color: var(--sp-ink) !important;
+      }
+      /* Move accent bar from left (vertical) to top (horizontal) on mobile, looks better in narrow box */
+      .cta-box::before {
+        width: 100% !important;
+        height: 4px !important;
+        background-color: var(--sp-accent) !important;
+      }
     }
     .cta-sub {
       color: #9A9A95 !important;
@@ -1284,6 +1350,16 @@
       line-height: 1.6 !important;
     }
     .cta-box .cta-char { display: none !important; }
+    /* Ghost / outline button needs paper-coloured border inside the dark CTA box on every viewport */
+    .cta-box .btn-outline {
+      color: var(--sp-paper) !important;
+      border-color: var(--sp-paper) !important;
+      background: transparent !important;
+    }
+    .cta-box .btn-outline:hover {
+      background: var(--sp-paper) !important;
+      color: var(--sp-ink) !important;
+    }
 
     /* ═══ FOOTER ═══ */
     footer {
