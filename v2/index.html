@@ -183,10 +183,10 @@
     }
 
     .sp-hero-inner {
-      display: grid;
-      grid-template-columns: 1.15fr 1fr;
-      gap: 72px; align-items: center;
       position: relative; z-index: 1;
+    }
+    .sp-hero-copy {
+      max-width: 880px;
     }
 
     /* Mono kicker */
@@ -358,13 +358,39 @@
 
     /* ────────────────────────────────────────────────────────────────
        AGENT CHAT BLOCK — 5 cyclic client/agent dialogues
-       Replaces Agentic Loop ring in hero visual slot
+       Standalone section in middle of page (between Services and Industries)
        ──────────────────────────────────────────────────────────────── */
+    #agent-chat { background: var(--sp-paper); }
+    .sp-chat-section {
+      display: grid;
+      grid-template-columns: 1fr 1.1fr;
+      gap: 80px;
+      align-items: center;
+    }
+    .sp-chat-section-head { max-width: 480px; }
+    .sp-chat-frame {
+      border: 1px solid var(--sp-rule);
+      padding: 28px 32px;
+      background: var(--sp-paper);
+      min-height: 360px;
+      position: relative;
+    }
+    .sp-chat-frame::before {
+      content: ''; position: absolute;
+      top: -1px; left: -1px; width: 28px; height: 3px;
+      background: var(--sp-accent);
+    }
+    @media (max-width: 900px) {
+      .sp-chat-section {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+      .sp-chat-section-head { max-width: none; }
+      .sp-chat-frame { padding: 22px; min-height: 340px; }
+    }
     .sp-chat {
-      position: absolute; inset: 0;
       display: flex; flex-direction: column;
       font-family: 'Geist', sans-serif;
-      padding: 4px;
     }
     .sp-chat-head {
       display: flex; align-items: center; justify-content: space-between;
@@ -1285,23 +1311,6 @@
         </div>
       </div>
 
-      <!-- RIGHT: Cyclic client/agent chat dialogues -->
-      <div class="sp-hero-visual">
-        <div class="sp-chat" id="sp-chat" aria-live="polite">
-          <div class="sp-chat-head">
-            <div class="sp-chat-kicker">
-              <span class="sp-ck-dot"></span>
-              <span class="sp-ck-num" id="sp-chat-num">01 / 05</span>
-              <span id="sp-chat-topic">Reconciliation</span>
-            </div>
-            <div class="sp-chat-live">
-              <span class="sp-live-dot"></span>
-              <span>Live</span>
-            </div>
-          </div>
-          <div class="sp-chat-feed" id="sp-chat-feed"></div>
-        </div>
-      </div>
 
       <!-- Legacy hidden block (kept for safe diff; remove next pass) -->
       <div class="hero-visual" style="display:none">
@@ -1776,6 +1785,44 @@
         </div>
       </div>
 
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════ AGENT CHAT (middle of page) ════════════ -->
+<section id="agent-chat">
+  <div class="container">
+    <div class="sp-chat-section">
+      <div class="sp-chat-section-head">
+        <div class="section-label">
+          <span class="en">Ask the Agent</span><span class="ru">Спроси у агента</span>
+        </div>
+        <h2 class="section-title">
+          <span class="en">Real requests we automate every week.</span>
+          <span class="ru">Реальные запросы, которые мы автоматизируем еженедельно.</span>
+        </h2>
+        <p class="section-sub">
+          <span class="en">Five client tasks, five agent replies. The kind of work that used to take a team — now handled in minutes.</span>
+          <span class="ru">Пять задач клиента, пять ответов агента. Работа, на которую раньше уходила команда — теперь решается за минуты.</span>
+        </p>
+      </div>
+      <div class="sp-chat-frame">
+        <div class="sp-chat" id="sp-chat" aria-live="polite">
+          <div class="sp-chat-head">
+            <div class="sp-chat-kicker">
+              <span class="sp-ck-dot"></span>
+              <span class="sp-ck-num" id="sp-chat-num">01 / 05</span>
+              <span id="sp-chat-topic">Reconciliation</span>
+            </div>
+            <div class="sp-chat-live">
+              <span class="sp-live-dot"></span>
+              <span>Live</span>
+            </div>
+          </div>
+          <div class="sp-chat-feed" id="sp-chat-feed"></div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -2282,7 +2329,6 @@
     gsap.set('.sp-hero-sub', { opacity: 0, y: 20 });
     gsap.set('.sp-hero-ctas .sp-btn', { opacity: 0, y: 18 });
     gsap.set('.sp-hero-stats > div', { opacity: 0, y: 16 });
-    gsap.set('.sp-chat', { opacity: 0, y: 14 });
 
     // ── Master timeline ───────────────────────────────────────────────
     const tl = gsap.timeline({ defaults: { ease: 'power3.out' }, delay: 0.15 });
@@ -2307,9 +2353,6 @@
     tl.to('.sp-hero-ctas .sp-btn', {
       opacity: 1, y: 0, duration: 0.5, ease: 'power2.out', stagger: 0.08
     }, 0.75);
-
-    // ── Chat block reveals + cycle starts ──────────────────────────
-    tl.to('.sp-chat', { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, 0.6);
 
     // Stats (delayed last)
     tl.to('.sp-hero-stats > div', {
@@ -2391,7 +2434,10 @@
       };
 
       // Section heads
-      reveal('#pain .section-head > *, #services .section-head > *, #industries .section-head > *, #process .section-head > *, #cta .section-head > *', { stagger: 0.06 });
+      reveal('#pain .section-head > *, #services .section-head > *, #industries .section-head > *, #process .section-head > *, #cta .section-head > *, #agent-chat .sp-chat-section-head > *', { stagger: 0.06 });
+
+      // Chat frame
+      reveal('.sp-chat-frame', { y: 30, duration: 0.7 });
 
       // Pain cards
       reveal('.pain-card', { y: 36, stagger: 0.07 });
