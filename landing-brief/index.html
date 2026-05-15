@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Бриф на конверсионный лендинг</title>
-  <meta name="description" content="Заполните бриф и отправьте ссылку с ответами заказчику лендинга." />
+  <meta name="description" content="Заполните бриф и отправьте ссылку или файл Борису." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -168,12 +168,12 @@
   <div class="wrap" id="app">
     <p class="kicker">Landing brief · AI Automation Studio</p>
     <h1>Бриф на конверсионный лендинг</h1>
-    <p class="lead">Заполните поля ниже. Нажмите <strong>«Получить ссылку»</strong> и отправьте её заказчику. По ссылке будут видны все ваши ответы — ничего отдельно прикреплять не нужно.</p>
+    <p class="lead">Заполните поля ниже. Нажмите <strong>«Получить ссылку»</strong> или <strong>«Скачать опросник»</strong> и отправьте результат Борису. По ссылке будут видны все ваши ответы.</p>
 
     <ol class="steps">
       <li><strong>Заполните</strong> все блоки (можно частично — пометьте «уточним»).</li>
-      <li><strong>Нажмите «Получить ссылку»</strong> → скопируйте из буфера.</li>
-      <li><strong>Отправьте ссылку</strong> в Telegram / email заказчику лендинга.</li>
+      <li><strong>Нажмите «Получить ссылку»</strong> → скопируйте из буфера (или <strong>«Скачать опросник»</strong>).</li>
+      <li><strong>Отправьте</strong> заполненную ссылку или заполненный файл Борису в WhatsApp или на почту.</li>
     </ol>
 
     <div id="filledBanner" class="filled-banner" role="status">
@@ -182,7 +182,7 @@
 
     <div class="toolbar">
       <button type="button" id="btnLink">Получить ссылку</button>
-      <button type="button" class="secondary" id="btnMd">Скачать .md</button>
+      <button type="button" class="secondary" id="btnMd">Скачать опросник</button>
       <button type="button" class="secondary" id="btnClear">Очистить</button>
       <p id="status" class="status" aria-live="polite"></p>
     </div>
@@ -413,9 +413,7 @@
     </form>
 
     <footer>
-      Шаблон: методология landing-page-builder (Kumar / AI Creo). Пустая форма:
-      <a id="emptyLink" href="">ссылка</a>
-      · Last updated: 2026-05-15
+      Пустая форма: <a id="emptyLink" href="">ссылка</a>
     </footer>
   </div>
 
@@ -566,13 +564,13 @@
       autosave();
       const { url } = buildShareUrl(data);
       if (url.length > 12000) {
-        setStatus('Ссылка слишком длинная — скачайте .md и отправьте файл.', 'err');
+        setStatus('Ссылка слишком длинная — скачайте опросник и отправьте файл Борису.', 'err');
         return;
       }
       try {
         await navigator.clipboard.writeText(url);
         history.replaceState(null, '', url);
-        setStatus('Ссылка скопирована в буфер. Отправьте её заказчику.', 'ok');
+        setStatus('Ссылка скопирована. Отправьте её Борису в WhatsApp или на почту.', 'ok');
       } catch {
         prompt('Скопируйте ссылку:', url);
         history.replaceState(null, '', url);
@@ -588,7 +586,7 @@
       a.download = `landing-brief-${(collectData().q09_brand || 'client').replace(/\s+/g, '-').slice(0, 40)}.md`;
       a.click();
       URL.revokeObjectURL(a.href);
-      setStatus('Файл .md скачан.', 'ok');
+      setStatus('Опросник скачан. Отправьте файл Борису в WhatsApp или на почту.', 'ok');
     });
 
     document.getElementById('btnClear').addEventListener('click', () => {
