@@ -357,223 +357,124 @@
     .sp-mock-card .sp-mc-row.sp-fill.sp-accent-fill { background: var(--sp-accent); }
 
     /* ────────────────────────────────────────────────────────────────
-       AGENTIC LOOP RING — circular Plan → Act → Observe → Reflect
+       AGENT CHAT BLOCK — 5 cyclic client/agent dialogues
+       Replaces Agentic Loop ring in hero visual slot
        ──────────────────────────────────────────────────────────────── */
-    .sp-loop { position: absolute; inset: 0; }
-    .sp-loop-svg {
+    .sp-chat {
       position: absolute; inset: 0;
-      width: 100%; height: 100%;
-      overflow: visible;
-    }
-    .sp-loop-arc {
-      fill: none;
-      stroke: var(--sp-ink);
-      stroke-width: 2.5;
-      stroke-linecap: round;
-    }
-    .sp-loop-arc.sp-accent-arc { stroke: var(--sp-accent); }
-
-    /* Runner — small accent dot that orbits the ring continuously */
-    .sp-loop-runner {
-      transform-origin: 260px 260px;
-    }
-    @keyframes sp-loop-orbit {
-      from { transform: rotate(0deg); }
-      to   { transform: rotate(360deg); }
-    }
-    .sp-anim-ready .sp-loop-runner {
-      animation: sp-loop-orbit 9s linear infinite;
-    }
-
-    /* Phase labels — positioned at segment midpoints (45°, 135°, 225°, 315°) */
-    .sp-loop-label {
-      position: absolute;
-      display: flex; flex-direction: column; align-items: flex-start;
-      gap: 4px;
+      display: flex; flex-direction: column;
       font-family: 'Geist', sans-serif;
-      line-height: 1;
-      z-index: 3;
+      padding: 4px;
     }
-    .sp-loop-label .sp-lbl-num {
+    .sp-chat-head {
+      display: flex; align-items: center; justify-content: space-between;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--sp-rule);
+      margin-bottom: 20px;
+      flex-shrink: 0;
+    }
+    .sp-chat-kicker {
       font-family: 'Geist Mono', monospace;
-      font-size: 10px;
-      letter-spacing: .22em;
+      font-size: 11px;
+      letter-spacing: .22em; text-transform: uppercase;
       color: var(--sp-muted);
+      display: inline-flex; align-items: center; gap: 10px;
     }
-    .sp-loop-label .sp-lbl-name {
-      font-size: 18px;
-      font-weight: 600;
-      color: var(--sp-ink);
-      letter-spacing: -.015em;
-    }
-    .sp-loop-label.sp-lbl-accent .sp-lbl-name { color: var(--sp-accent); }
-    .sp-loop-label.sp-lbl-accent .sp-lbl-num { color: var(--sp-accent); opacity: .7; }
-
-    /* 4 corner positions for 4 segment midpoints */
-    .sp-lbl-1 { top:  10%; right: -2%;  text-align: left; align-items: flex-start; } /* NE — PLAN-end / between ACT and PLAN, top of arc 1 → place near top-right */
-    .sp-lbl-2 { bottom: 10%; right: -2%; text-align: left; align-items: flex-start; } /* SE — between ACT and OBSERVE */
-    .sp-lbl-3 { bottom: 10%; left: -2%;  text-align: right; align-items: flex-end; }  /* SW — between OBSERVE and REFLECT */
-    .sp-lbl-4 { top: 10%; left: -2%;  text-align: right; align-items: flex-end; }     /* NW — between REFLECT and PLAN */
-
-    /* Center status block */
-    .sp-loop-center {
-      position: absolute;
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      width: 200px;
-      text-align: center;
-      z-index: 2;
-      display: flex; flex-direction: column; align-items: center; gap: 10px;
-    }
-    .sp-loop-kicker {
-      font-family: 'Geist Mono', monospace;
-      font-size: 10px;
-      letter-spacing: .24em;
-      text-transform: uppercase;
-      color: var(--sp-muted);
-      display: inline-flex; align-items: center; gap: 8px;
-    }
-    .sp-loop-kicker::before {
-      content: ''; width: 5px; height: 5px;
-      background: var(--sp-accent);
+    .sp-chat-kicker .sp-ck-dot {
+      width: 6px; height: 6px; background: var(--sp-accent);
       display: inline-block;
     }
-    .sp-loop-stat {
+    .sp-chat-kicker .sp-ck-num { color: var(--sp-ink); font-weight: 500; }
+    .sp-chat-live {
+      display: inline-flex; align-items: center; gap: 8px;
       font-family: 'Geist Mono', monospace;
-      font-size: 64px;
-      font-weight: 500;
+      font-size: 10px; letter-spacing: .2em; text-transform: uppercase;
       color: var(--sp-ink);
-      letter-spacing: -.04em;
-      line-height: 1;
-      font-variant-numeric: tabular-nums;
     }
-    .sp-loop-sub {
-      font-family: 'Geist Mono', monospace;
-      font-size: 10px;
-      letter-spacing: .18em;
-      text-transform: uppercase;
-      color: var(--sp-muted);
+    .sp-chat-live .sp-live-dot {
+      width: 6px; height: 6px; background: var(--sp-led, #1FB95B);
+      border-radius: 50%;
+      box-shadow: 0 0 0 0 rgba(31,185,91,.55);
+      animation: sp-live-pulse 2s ease-out infinite;
     }
-
-    /* Keep card class but unused on hero now (legacy + responsive safety) */
-    .sp-mock-card { display: none; }
-
-    /* SVG connectors layer */
-    .sp-mock-paths {
-      position: absolute; inset: 0;
-      width: 100%; height: 100%;
-      pointer-events: none;
-      z-index: 1;
-      overflow: visible;
+    @keyframes sp-live-pulse {
+      0% { box-shadow: 0 0 0 0 rgba(31,185,91,.6); }
+      80% { box-shadow: 0 0 0 8px rgba(31,185,91,0); }
+      100% { box-shadow: 0 0 0 0 rgba(31,185,91,0); }
     }
-    .sp-mock-paths path {
-      fill: none;
-      stroke: var(--sp-ink);
-      stroke-width: 1.4;
-      stroke-linecap: round;
+    .sp-chat-feed {
+      display: flex; flex-direction: column; gap: 10px;
+      flex: 1;
+      overflow: hidden;
     }
-    .sp-mock-paths path.sp-accent-path {
-      stroke: var(--sp-accent);
-      stroke-width: 1.4;
+    .sp-msg {
+      display: flex; flex-direction: column;
+      max-width: 88%;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity .35s ease-out, transform .35s ease-out;
     }
-    .sp-mock-paths .sp-arrow-tip {
-      fill: var(--sp-ink);
-      stroke: none;
-    }
-    .sp-mock-paths .sp-arrow-tip.sp-accent-tip {
-      fill: var(--sp-accent);
-    }
-
-    /* Feedback label that sits on accent path */
-    .sp-mock-fb-label {
-      position: absolute; left: 6px; top: 50%;
-      transform: translateY(-50%) rotate(-90deg);
-      transform-origin: left center;
+    .sp-msg.sp-show { opacity: 1; transform: translateY(0); }
+    .sp-msg-meta {
       font-family: 'Geist Mono', monospace;
       font-size: 9px; letter-spacing: .22em; text-transform: uppercase;
-      color: var(--sp-accent);
-      background: var(--sp-paper);
-      padding: 2px 8px;
-      white-space: nowrap;
-      z-index: 2;
-    }
-
-    /* In-card mini visualizations */
-    .sp-mc-steps { display: flex; gap: 4px; margin-top: 10px; }
-    .sp-mc-steps .sp-step-cell {
-      width: 12px; height: 12px;
-      border: 1px solid var(--sp-ink);
-      background: var(--sp-paper);
-    }
-    .sp-mc-steps .sp-step-cell.sp-active { background: var(--sp-accent); border-color: var(--sp-accent); }
-
-    .sp-mc-progress {
-      height: 6px; background: var(--sp-rule);
-      margin-top: 12px; position: relative; overflow: hidden;
-    }
-    .sp-mc-progress .sp-mc-progress-fill {
-      position: absolute; top: 0; left: 0; height: 100%;
-      width: 0; background: var(--sp-ink);
-    }
-    .sp-mc-progress .sp-mc-progress-fill.sp-accent-fill { background: var(--sp-accent); }
-
-    .sp-mc-checks {
-      display: flex; gap: 8px; margin-top: 12px;
-      font-family: 'Geist Mono', monospace;
-      font-size: 14px; color: var(--sp-ink);
-    }
-    .sp-mc-checks .sp-check {
-      width: 18px; height: 18px;
-      border: 1px solid var(--sp-ink);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 11px; line-height: 1;
-      background: var(--sp-paper);
-      color: var(--sp-ink);
-    }
-    .sp-mc-checks .sp-check.sp-pass { background: var(--sp-ink); color: var(--sp-paper); }
-    .sp-mc-checks .sp-check.sp-fail { background: var(--sp-paper); color: var(--sp-accent); border-color: var(--sp-accent); }
-
-    .sp-mc-meta {
-      margin-top: 12px;
-      font-family: 'Geist Mono', monospace;
-      font-size: 9px; letter-spacing: .2em; text-transform: uppercase;
       color: var(--sp-muted);
+      margin-bottom: 4px;
+      display: inline-flex; align-items: center; gap: 8px;
     }
-
-    /* Live ticker chip — centred under the loop */
-    .sp-mock-ticker {
-      position: absolute;
-      bottom: -14px; left: 50%;
-      transform: translateX(-50%);
-      display: inline-flex; align-items: center; gap: 10px;
-      background: var(--sp-ink); color: var(--sp-paper);
-      padding: 10px 16px;
-      font-family: 'Geist Mono', monospace;
-      font-size: 10px; letter-spacing: .14em; text-transform: uppercase;
-      white-space: nowrap;
-      z-index: 5;
+    .sp-msg-meta .sp-meta-mark {
+      width: 5px; height: 5px;
+      background: var(--sp-muted);
+      display: inline-block;
     }
-    .sp-mock-ticker .sp-tk-dot {
-      width: 6px; height: 6px; background: var(--sp-accent);
+    .sp-msg-bubble {
+      padding: 11px 15px;
+      font-family: 'Geist', sans-serif;
+      font-size: 14px;
+      line-height: 1.45;
+      letter-spacing: -.005em;
+      border: 1px solid var(--sp-ink);
+      border-radius: 2px;
+    }
+    .sp-msg.sp-client { align-self: flex-end; align-items: flex-end; }
+    .sp-msg.sp-client .sp-msg-bubble {
+      background: var(--sp-ink); color: var(--sp-paper); border-color: var(--sp-ink);
+    }
+    .sp-msg.sp-client .sp-msg-meta { justify-content: flex-end; }
+    .sp-msg.sp-client .sp-meta-mark { background: var(--sp-ink); }
+    .sp-msg.sp-agent { align-self: flex-start; align-items: flex-start; }
+    .sp-msg.sp-agent .sp-msg-bubble {
+      background: var(--sp-paper); color: var(--sp-ink);
+    }
+    .sp-msg.sp-agent .sp-meta-mark { background: var(--sp-accent); }
+    .sp-typing {
+      align-self: flex-start;
+      display: inline-flex; align-items: center;
+      padding: 13px 16px; gap: 5px;
+      border: 1px solid var(--sp-ink);
+      border-radius: 2px;
+      background: var(--sp-paper);
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity .25s ease-out, transform .25s ease-out;
+    }
+    .sp-typing.sp-show { opacity: 1; transform: translateY(0); }
+    .sp-typing .sp-dot {
+      width: 5px; height: 5px; background: var(--sp-ink);
       border-radius: 50%;
-      box-shadow: 0 0 0 0 var(--sp-accent);
+      animation: sp-type-bob 1.2s ease-in-out infinite;
+    }
+    .sp-typing .sp-dot:nth-child(2) { animation-delay: .15s; }
+    .sp-typing .sp-dot:nth-child(3) { animation-delay: .3s; }
+    @keyframes sp-type-bob {
+      0%, 100% { transform: translateY(0); opacity: .35; }
+      40% { transform: translateY(-3px); opacity: 1; }
     }
 
-    /* Idle float for cards */
-    @keyframes sp-float-a { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
-    @keyframes sp-float-b { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
-    @keyframes sp-float-c { 0%,100% { transform: translate(-50%, 0); } 50% { transform: translate(-50%, -4px); } }
-    .sp-anim-ready .sp-mc-1 { animation: sp-float-a 6s ease-in-out infinite; }
-    .sp-anim-ready .sp-mc-2 { animation: sp-float-b 7s ease-in-out infinite .8s; }
-    .sp-anim-ready .sp-mc-3 { animation: sp-float-c 6.5s ease-in-out infinite 1.6s; }
-
-    /* Loop pulse pings on arrow paths (CSS-only, simple) */
-    @keyframes sp-loop-pulse {
-      0%   { box-shadow: 0 0 0 0 rgba(255,61,46,.55); }
-      80%  { box-shadow: 0 0 0 8px rgba(255,61,46,0); }
-      100% { box-shadow: 0 0 0 0 rgba(255,61,46,0); }
-    }
-    .sp-anim-ready .sp-tk-dot { animation: sp-loop-pulse 2.2s ease-out infinite; }
+    /* Legacy hero-mock classes — hidden, kept only so any stale CSS hooks resolve cleanly */
+    .sp-mock-card, .sp-mock-paths, .sp-mock-ticker,
+    .sp-loop, .sp-loop-svg, .sp-loop-arc, .sp-loop-label,
+    .sp-loop-center, .sp-loop-runner { display: none !important; }
 
     /* Reduced motion */
     @media (prefers-reduced-motion: reduce) {
@@ -1384,83 +1285,21 @@
         </div>
       </div>
 
-      <!-- RIGHT: Agentic Loop ring (Plan · Act · Observe · Reflect) -->
+      <!-- RIGHT: Cyclic client/agent chat dialogues -->
       <div class="sp-hero-visual">
-        <div class="sp-mock sp-loop" aria-hidden="true">
-
-          <svg class="sp-loop-svg" viewBox="0 0 520 520">
-            <defs>
-              <marker id="sp-tip-ink" viewBox="0 0 10 10" refX="9" refY="5"
-                      markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
-                <path d="M 0 0 L 10 5 L 0 10 z" fill="#0A0A0A"/>
-              </marker>
-              <marker id="sp-tip-accent" viewBox="0 0 10 10" refX="9" refY="5"
-                      markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
-                <path d="M 0 0 L 10 5 L 0 10 z" fill="#FF3D2E"/>
-              </marker>
-            </defs>
-
-            <!-- Faint full-ring guide -->
-            <circle class="sp-loop-guide" cx="260" cy="260" r="170"
-                    fill="none" stroke="#E5E4DE" stroke-width="1"/>
-
-            <!-- 4 segments, ~80° each, gaps for arrowheads -->
-            <path class="sp-loop-arc sp-arc-1"
-                  d="M 274.82 90.65 A 170 170 0 0 1 429.35 245.18"
-                  marker-end="url(#sp-tip-ink)"/>
-            <path class="sp-loop-arc sp-arc-2 sp-accent-arc"
-                  d="M 429.35 274.82 A 170 170 0 0 1 274.82 429.35"
-                  marker-end="url(#sp-tip-accent)"/>
-            <path class="sp-loop-arc sp-arc-3"
-                  d="M 245.18 429.35 A 170 170 0 0 1 90.65 274.82"
-                  marker-end="url(#sp-tip-ink)"/>
-            <path class="sp-loop-arc sp-arc-4"
-                  d="M 90.65 245.18 A 170 170 0 0 1 245.18 90.65"
-                  marker-end="url(#sp-tip-ink)"/>
-
-            <!-- Runner: small accent dot orbiting the ring -->
-            <g class="sp-loop-runner">
-              <circle cx="260" cy="90" r="6" fill="#FF3D2E"/>
-            </g>
-          </svg>
-
-          <!-- Phase labels, mono, just outside each segment midpoint -->
-          <div class="sp-loop-label sp-lbl-1">
-            <span class="sp-lbl-num">01</span>
-            <span class="sp-lbl-name">Plan</span>
-          </div>
-          <div class="sp-loop-label sp-lbl-2 sp-lbl-accent">
-            <span class="sp-lbl-num">02</span>
-            <span class="sp-lbl-name">Act</span>
-          </div>
-          <div class="sp-loop-label sp-lbl-3">
-            <span class="sp-lbl-num">03</span>
-            <span class="sp-lbl-name">Observe</span>
-          </div>
-          <div class="sp-loop-label sp-lbl-4">
-            <span class="sp-lbl-num">04</span>
-            <span class="sp-lbl-name">Reflect</span>
-          </div>
-
-          <!-- Central status -->
-          <div class="sp-loop-center">
-            <div class="sp-loop-kicker">AI · Core Loop</div>
-            <div class="sp-loop-stat">
-              <span class="sp-loop-num" data-count="47">0</span>
+        <div class="sp-chat" id="sp-chat" aria-live="polite">
+          <div class="sp-chat-head">
+            <div class="sp-chat-kicker">
+              <span class="sp-ck-dot"></span>
+              <span class="sp-ck-num" id="sp-chat-num">01 / 05</span>
+              <span id="sp-chat-topic">Reconciliation</span>
             </div>
-            <div class="sp-loop-sub">
-              <span class="en">tasks looped today</span>
-              <span class="ru">задач за сегодня</span>
+            <div class="sp-chat-live">
+              <span class="sp-live-dot"></span>
+              <span>Live</span>
             </div>
           </div>
-
-          <!-- Live ticker centred below -->
-          <div class="sp-mock-ticker">
-            <span class="sp-tk-dot"></span>
-            <span class="en">Live · 3 agents · 12s cycle</span>
-            <span class="ru">Live · 3 агента · 12с цикл</span>
-          </div>
-
+          <div class="sp-chat-feed" id="sp-chat-feed"></div>
         </div>
       </div>
 
@@ -2207,6 +2046,8 @@
     document.title = l === 'ru'
       ? 'AI Automation Studio — Автоматизируй. Масштабируй. Расти.'
       : 'AI Automation Studio — Automate. Scale. Grow.';
+    // Restart chat cycle so dialogues render in the new language
+    if (typeof window.__chatRestartForLang === 'function') window.__chatRestartForLang();
   }
 
   // Run on load to hide .ru spans by default
@@ -2243,6 +2084,175 @@
   });
 </script>
 
+<!-- ─── Agent chat cycle (Swiss Pulse hero visual) ─────────────── -->
+<script>
+(() => {
+  const DIALOGUES = [
+    {
+      topic: { en: 'Reconciliation', ru: 'Реконсиляция' },
+      client: {
+        en: 'Can you reconcile invoices, contracts and payments from last year?',
+        ru: 'Можешь мне сделать реконсиляцию счетов, договоров и платежей за прошлый год?'
+      },
+      agent: {
+        en: 'Yes, sure — where’s the data?',
+        ru: 'Да, конечно. Где у тебя лежат данные?'
+      }
+    },
+    {
+      topic: { en: 'Content ops', ru: 'Контент' },
+      client: {
+        en: 'Hey, I’ll send you a video — can you cut Reels with subtitles?',
+        ru: 'Привет, я дам тебе видео — можешь нарезать рилсы с субтитрами?'
+      },
+      agent: {
+        en: 'Yes. Share the drive link. Instagram or LinkedIn format? Translation needed?',
+        ru: 'Да, конечно. Дай ссылку на диск, где видео. Формат под Instagram или LinkedIn? Нужен перевод?'
+      }
+    },
+    {
+      topic: { en: 'Strategy', ru: 'Стратегия' },
+      client: {
+        en: 'Hi. Read the brief, deep-dive competitors and trends, then build a business plan and financial model.',
+        ru: 'Привет. Посмотри описание проекта, сделай глубокий анализ конкурентов и трендов, затем бизнес-план и финансовую модель.'
+      },
+      agent: {
+        en: 'On it. I’ll review and ask clarifying questions until I understand the project at 99%.',
+        ru: 'Конечно. Я посмотрю и задам уточняющие вопросы, пока не пойму проект на 99%.'
+      }
+    },
+    {
+      topic: { en: 'Finance · P&L', ru: 'Финансы · P&L' },
+      client: {
+        en: 'Hi, can you compare April P&L against the previous three months and analyse the trends?',
+        ru: 'Привет, можешь сравнить P&L за апрель и предыдущие три месяца и проанализировать тренды?'
+      },
+      agent: {
+        en: 'Done — refreshed the dashboard and dropped the report in the folder.',
+        ru: 'Да, обновил дэшборд и отчёт положил в папку.'
+      }
+    },
+    {
+      topic: { en: 'Competitor watch', ru: 'Конкуренты' },
+      client: {
+        en: 'Hi, monitor my 10 closest competitors — track their new products and services, plus customer comments on social.',
+        ru: 'Привет, регулярно смотри 10 моих ближайших конкурентов и отслеживай их новые продукты и услуги, а также комментарии клиентов в соцсетях.'
+      },
+      agent: {
+        en: 'I’ll send you a weekly brief by email.',
+        ru: 'Раз в неделю буду присылать тебе бриф на почту.'
+      }
+    }
+  ];
+
+  let dialogIdx = 0;
+  let timers = [];
+  let started = false;
+
+  const $feed = () => document.getElementById('sp-chat-feed');
+  const $num  = () => document.getElementById('sp-chat-num');
+  const $topic = () => document.getElementById('sp-chat-topic');
+
+  const sleep = (ms) => new Promise(r => {
+    const id = setTimeout(r, ms);
+    timers.push(id);
+  });
+
+  function clearTimers() {
+    timers.forEach(t => clearTimeout(t));
+    timers = [];
+  }
+
+  function makeMsg(side, label, text) {
+    const wrap = document.createElement('div');
+    wrap.className = `sp-msg sp-${side}`;
+    wrap.innerHTML =
+      `<div class="sp-msg-meta"><span class="sp-meta-mark"></span>${label}</div>` +
+      `<div class="sp-msg-bubble"></div>`;
+    wrap.querySelector('.sp-msg-bubble').textContent = text;
+    return wrap;
+  }
+
+  function makeTyping() {
+    const t = document.createElement('div');
+    t.className = 'sp-typing';
+    t.innerHTML = '<span class="sp-dot"></span><span class="sp-dot"></span><span class="sp-dot"></span>';
+    return t;
+  }
+
+  function pickReplyDelay(text) {
+    const len = (text || '').length;
+    return Math.max(1000, Math.min(2400, 600 + len * 16));
+  }
+
+  function currentLang() {
+    return (document.documentElement.lang || 'en').toLowerCase().startsWith('ru') ? 'ru' : 'en';
+  }
+
+  async function showDialogue(i) {
+    const lang = currentLang();
+    const d = DIALOGUES[i];
+    const labels = lang === 'ru'
+      ? { client: 'Клиент', agent: 'AI · Агент' }
+      : { client: 'Client', agent: 'AI · Agent' };
+
+    const total = String(DIALOGUES.length).padStart(2, '0');
+    const num = String(i + 1).padStart(2, '0');
+    if ($num()) $num().textContent = `${num} / ${total}`;
+    if ($topic()) $topic().textContent = d.topic[lang];
+
+    const feed = $feed();
+    if (!feed) return;
+    feed.innerHTML = '';
+
+    const clientMsg = makeMsg('client', labels.client, d.client[lang]);
+    feed.appendChild(clientMsg);
+    await sleep(60);
+    clientMsg.classList.add('sp-show');
+
+    await sleep(700);
+    const typing = makeTyping();
+    feed.appendChild(typing);
+    await sleep(40);
+    typing.classList.add('sp-show');
+
+    await sleep(pickReplyDelay(d.agent[lang]));
+    typing.classList.remove('sp-show');
+    await sleep(220);
+    typing.remove();
+
+    const agentMsg = makeMsg('agent', labels.agent, d.agent[lang]);
+    feed.appendChild(agentMsg);
+    await sleep(50);
+    agentMsg.classList.add('sp-show');
+
+    await sleep(4500);
+    feed.querySelectorAll('.sp-msg').forEach(el => el.classList.remove('sp-show'));
+    await sleep(420);
+
+    dialogIdx = (dialogIdx + 1) % DIALOGUES.length;
+    showDialogue(dialogIdx);
+  }
+
+  function start() {
+    if (started) return;
+    started = true;
+    dialogIdx = 0;
+    showDialogue(0);
+  }
+  function restartForLang() {
+    // Cancel current cycle and restart from the first dialogue in the new language
+    clearTimers();
+    started = false;
+    dialogIdx = 0;
+    if ($feed()) start();
+  }
+
+  window.__chatStart = start;
+  window.__chatRestartForLang = restartForLang;
+})();
+</script>
+
 <!-- ─── Swiss Pulse choreography ─────────────────────────────────── -->
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js" defer></script>
@@ -2263,16 +2273,8 @@
       p.style.strokeDashoffset = len;
     });
 
-    // ── Prep loop arcs for draw animation ─────────────────────────────
-    document.querySelectorAll('.sp-loop-arc').forEach(p => {
-      const len = p.getTotalLength();
-      p.style.strokeDasharray = len;
-      p.style.strokeDashoffset = len;
-    });
-
     // NOTE: prefers-reduced-motion no longer short-circuits the hero timeline.
     // Hero entrance + counter rolls are short and light — same behaviour on mobile/desktop.
-    // CSS keyframes for orbit dot and idle floats still honour @media (prefers-reduced-motion).
 
     // ── Initial state ─────────────────────────────────────────────────
     gsap.set('.sp-kicker', { opacity: 0, y: 14 });
@@ -2280,11 +2282,7 @@
     gsap.set('.sp-hero-sub', { opacity: 0, y: 20 });
     gsap.set('.sp-hero-ctas .sp-btn', { opacity: 0, y: 18 });
     gsap.set('.sp-hero-stats > div', { opacity: 0, y: 16 });
-    gsap.set('.sp-loop-guide', { opacity: 0 });
-    gsap.set('.sp-loop-label', { opacity: 0, y: 8 });
-    gsap.set('.sp-loop-center', { opacity: 0, scale: 0.92 });
-    gsap.set('.sp-loop-runner', { opacity: 0 });
-    gsap.set('.sp-mock-ticker', { opacity: 0, y: 10 });
+    gsap.set('.sp-chat', { opacity: 0, y: 14 });
 
     // ── Master timeline ───────────────────────────────────────────────
     const tl = gsap.timeline({ defaults: { ease: 'power3.out' }, delay: 0.15 });
@@ -2292,15 +2290,13 @@
     // Kicker
     tl.to('.sp-kicker', { opacity: 1, y: 0, duration: 0.55, ease: 'power2.out' }, 0);
 
-    // Headline words — only animate currently-visible language
-    const activeLang = document.documentElement.lang || 'en';
-    const wordSel = `.sp-hero-title .${activeLang} .sp-word > span`;
-    tl.to(wordSel, {
+    // Headline words — animate BOTH language variants (hidden lang is display:none, harmless)
+    tl.to('.sp-hero-title .sp-word > span', {
       y: '0%', duration: 0.75, ease: 'expo.out', stagger: 0.09
     }, 0.1);
 
-    // Underline draws after accent word lands
-    tl.to(`.sp-hero-title .${activeLang} .sp-underline path`, {
+    // Underline draws (both lang variants) after accent word lands
+    tl.to('.sp-hero-title .sp-underline path', {
       strokeDashoffset: 0, duration: 0.7, ease: 'power2.inOut'
     }, 0.55);
 
@@ -2312,40 +2308,16 @@
       opacity: 1, y: 0, duration: 0.5, ease: 'power2.out', stagger: 0.08
     }, 0.75);
 
-    // ── Agentic Loop ring ──────────────────────────────────────────
-    // Faint guide circle appears first
-    tl.to('.sp-loop-guide', { opacity: 1, duration: 0.5, ease: 'power2.out' }, 0.4);
-
-    // 4 arcs draw clockwise, one after another (Plan → Act → Observe → Reflect)
-    tl.to('.sp-arc-1', { strokeDashoffset: 0, duration: 0.6, ease: 'power2.inOut' }, 0.55);
-    tl.to('.sp-arc-2', { strokeDashoffset: 0, duration: 0.6, ease: 'power2.inOut' }, 0.75);
-    tl.to('.sp-arc-3', { strokeDashoffset: 0, duration: 0.6, ease: 'power2.inOut' }, 0.95);
-    tl.to('.sp-arc-4', { strokeDashoffset: 0, duration: 0.6, ease: 'power2.inOut' }, 1.15);
-
-    // Phase labels — each lands just after its corresponding arc finishes
-    tl.to('.sp-lbl-1', { opacity: 1, y: 0, duration: 0.45, ease: 'power2.out' }, 0.9);
-    tl.to('.sp-lbl-2', { opacity: 1, y: 0, duration: 0.45, ease: 'power2.out' }, 1.1);
-    tl.to('.sp-lbl-3', { opacity: 1, y: 0, duration: 0.45, ease: 'power2.out' }, 1.3);
-    tl.to('.sp-lbl-4', { opacity: 1, y: 0, duration: 0.45, ease: 'power2.out' }, 1.5);
-
-    // Centre status appears (kicker + big counter + sub)
-    tl.to('.sp-loop-center', {
-      opacity: 1, scale: 1, duration: 0.55, ease: 'back.out(1.8)'
-    }, 1.0);
-
-    // Runner dot reveals + starts orbiting (via CSS animation on sp-anim-ready)
-    tl.to('.sp-loop-runner', { opacity: 1, duration: 0.35, ease: 'power2.out' }, 1.7);
-
-    // Ticker
-    tl.to('.sp-mock-ticker', { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }, 1.75);
+    // ── Chat block reveals + cycle starts ──────────────────────────
+    tl.to('.sp-chat', { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, 0.6);
 
     // Stats (delayed last)
     tl.to('.sp-hero-stats > div', {
       opacity: 1, y: 0, duration: 0.55, ease: 'power2.out', stagger: 0.1
     }, 0.95);
 
-    // Counter rolls — hero stats + centre loop counter
-    document.querySelectorAll('.sp-stat-num [data-count], .sp-loop-num[data-count]').forEach(el => {
+    // Counter rolls — hero stats
+    document.querySelectorAll('.sp-stat-num [data-count]').forEach(el => {
       const target = parseFloat(el.dataset.count);
       const decimals = (el.dataset.count.split('.')[1] || '').length;
       const obj = { v: 0 };
@@ -2355,10 +2327,11 @@
       }, 1.15);
     });
 
-    // After timeline starts the idle layer
+    // After timeline starts the chat cycle
     tl.add(() => {
       document.querySelector('.sp-hero-visual')?.classList.add('sp-anim-ready');
-    }, 1.8);
+      if (typeof window.__chatStart === 'function') window.__chatStart();
+    }, 1.4);
 
     // ════════════════════════════════════════════════════════════════
     // SCROLL-TRIGGERED ENTRANCES — Swiss Pulse
@@ -2366,38 +2339,55 @@
     if (window.ScrollTrigger) {
       gsap.registerPlugin(ScrollTrigger);
 
-      // Helper: reveal selector with stagger on scroll.
-      // Uses IntersectionObserver-like check: if element already in viewport on load,
-      // animate it immediately. Otherwise wait until it scrolls in.
+      // Reveal helper — uses native IntersectionObserver instead of ScrollTrigger
+      // for entrance animations. More reliable on Playwright fullPage captures and on
+      // browsers where ScrollTrigger scroll proxy is finicky. Animation itself runs via GSAP.
       const reveal = (selector, opts = {}) => {
         const els = gsap.utils.toArray(selector);
         if (!els.length) return;
+        const y = opts.y ?? 28;
+        const duration = opts.duration ?? 0.75;
+        const ease = opts.ease || 'power3.out';
+        const stagger = opts.stagger ?? 0.08;
+
+        // Set initial state for all
+        gsap.set(els, { opacity: 0, y });
+
+        // For ALREADY-VISIBLE elements (above the fold of initial viewport) — animate immediately
         const vh = window.innerHeight;
+        const pending = [];
         els.forEach((el, i) => {
-          const rect = el.getBoundingClientRect();
-          const alreadyVisible = rect.top < vh * 0.95 && rect.bottom > 0;
-          const stagger = (opts.stagger ?? 0.08) * (i % 8);
-          const tween = {
-            opacity: 0,
-            y: opts.y ?? 28,
-            duration: opts.duration ?? 0.75,
-            ease: opts.ease || 'power3.out',
-          };
-          if (alreadyVisible) {
-            gsap.from(el, { ...tween, delay: 0.2 + stagger, overwrite: 'auto' });
-          } else {
-            gsap.from(el, {
-              ...tween,
-              delay: stagger,
-              scrollTrigger: {
-                trigger: el,
-                start: opts.start || 'top 90%',
-                once: true,
-              },
+          const r = el.getBoundingClientRect();
+          if (r.top < vh && r.bottom > 0) {
+            gsap.to(el, {
+              opacity: 1, y: 0, duration, ease,
+              delay: 0.2 + stagger * (i % 8),
               overwrite: 'auto',
             });
+          } else {
+            pending.push(el);
           }
         });
+
+        if (!pending.length) return;
+
+        // For pending elements, observe entry via IntersectionObserver
+        let pendingIdx = 0;
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              const el = entry.target;
+              gsap.to(el, {
+                opacity: 1, y: 0, duration, ease,
+                delay: stagger * (pendingIdx % 8),
+                overwrite: 'auto',
+              });
+              pendingIdx++;
+              io.unobserve(el);
+            }
+          });
+        }, { rootMargin: '0px 0px -10% 0px', threshold: 0.01 });
+        pending.forEach(el => io.observe(el));
       };
 
       // Section heads
