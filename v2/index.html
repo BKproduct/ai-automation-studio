@@ -808,31 +808,53 @@
 
     /* ─── Mobile nav stabilisation (prevent layout jump on EN ↔ RU toggle) ─── */
     @media (max-width: 720px) {
-      /* Hide the "Book a Call" button on mobile — CTA still in hero + hamburger */
-      nav#navbar .btn.btn-primary { display: none !important; }
-
       /* Logo: smaller, single line */
       .nav-logo {
         font-size: 13px !important;
         gap: 8px !important;
         white-space: nowrap;
       }
+      .nav-logo svg { width: 26px !important; height: 26px !important; }
 
-      /* Lang toggle: fixed width so EN/RU buttons can never shift */
-      .lang-toggle {
+      /* Lang toggle: wider per button so 'RU' is fully visible, never clipped */
+      .lang-toggle { flex-shrink: 0; }
+      .lang-btn {
+        min-width: 36px !important;
+        text-align: center;
+        padding: 8px 11px !important;
+        font-size: 11px !important;
+        letter-spacing: .16em !important;
+      }
+
+      /* Right cluster: tighter, consistent spacing, vertical alignment */
+      .nav-right { gap: 10px !important; align-items: center; }
+
+      /* Compact "Book a Call" — hide emoji, shorter padding, nowrap */
+      nav#navbar .btn.btn-primary {
+        height: 36px !important;
+        padding: 0 12px !important;
+        font-size: 12px !important;
+        font-weight: 500 !important;
+        white-space: nowrap;
         flex-shrink: 0;
       }
-      .lang-btn {
-        min-width: 30px;
-        text-align: center;
-        padding: 8px 10px !important;
-      }
+      /* Strip the 📅 emoji on mobile to free horizontal space */
+      nav#navbar .btn.btn-primary { font-size: 0 !important; }
+      nav#navbar .btn.btn-primary > span,
+      nav#navbar .btn.btn-primary > .en,
+      nav#navbar .btn.btn-primary > .ru { font-size: 12px !important; }
 
-      /* Right cluster: ensure consistent spacing */
-      .nav-right { gap: 10px !important; }
-
-      /* Show hamburger (it was hidden by base styles for tablet sizes) */
+      /* Show hamburger */
       .hamburger { display: flex; }
+    }
+    @media (max-width: 420px) {
+      /* Tightest phones: shrink button further, ensure everything fits */
+      nav#navbar .btn.btn-primary {
+        padding: 0 10px !important;
+      }
+      nav#navbar .btn.btn-primary > span { font-size: 11px !important; }
+      .nav-logo { font-size: 12px !important; }
+      .nav-right { gap: 8px !important; }
     }
 
     /* ═══════════════════════════════════════════════════════════════════
