@@ -184,9 +184,58 @@
 
     .sp-hero-inner {
       position: relative; z-index: 1;
+      display: grid;
+      grid-template-columns: 1.45fr 1fr;
+      gap: 64px;
+      align-items: center;
     }
     .sp-hero-copy {
-      max-width: 880px;
+      max-width: 720px;
+    }
+    .sp-hero-chat-wrap {
+      display: flex; align-items: center; justify-content: center;
+      min-height: 360px;
+    }
+    /* Compact chat variant for hero — about half the standalone size */
+    .sp-chat.sp-chat--compact {
+      width: 100%;
+      max-width: 360px;
+      border: 1px solid var(--sp-rule);
+      padding: 16px 18px;
+      background: var(--sp-paper);
+      position: relative;
+      min-height: 280px;
+    }
+    .sp-chat.sp-chat--compact::before {
+      content: ''; position: absolute;
+      top: -1px; left: -1px; width: 22px; height: 2.5px;
+      background: var(--sp-accent);
+    }
+    .sp-chat.sp-chat--compact .sp-chat-head {
+      padding-bottom: 10px;
+      margin-bottom: 12px;
+    }
+    .sp-chat.sp-chat--compact .sp-chat-kicker { font-size: 9.5px; gap: 8px; }
+    .sp-chat.sp-chat--compact .sp-chat-kicker .sp-ck-dot { width: 5px; height: 5px; }
+    .sp-chat.sp-chat--compact .sp-chat-live { font-size: 9px; gap: 6px; }
+    .sp-chat.sp-chat--compact .sp-chat-live .sp-live-dot { width: 5px; height: 5px; }
+    .sp-chat.sp-chat--compact .sp-chat-feed { gap: 7px; }
+    .sp-chat.sp-chat--compact .sp-msg-meta { font-size: 8.5px; margin-bottom: 3px; gap: 6px; }
+    .sp-chat.sp-chat--compact .sp-msg-meta .sp-meta-mark { width: 4px; height: 4px; }
+    .sp-chat.sp-chat--compact .sp-msg-bubble { font-size: 12px; padding: 8px 11px; line-height: 1.4; }
+    .sp-chat.sp-chat--compact .sp-typing { padding: 9px 12px; gap: 4px; }
+    .sp-chat.sp-chat--compact .sp-typing .sp-dot { width: 4px; height: 4px; }
+    .sp-chat.sp-chat--compact .sp-msg { max-width: 92%; }
+    @media (max-width: 900px) {
+      .sp-hero-inner { grid-template-columns: 1fr; gap: 40px; }
+      .sp-hero-chat-wrap { min-height: 320px; }
+      .sp-chat.sp-chat--compact { max-width: 100%; }
+    }
+    @media (max-width: 560px) {
+      /* Shrink hero headline so longer RU words ("Автоматизируй", "Масштабируй") don't overflow */
+      .sp-hero-title { font-size: clamp(36px, 11vw, 56px) !important; letter-spacing: -.035em !important; }
+      .sp-hero-stats { gap: 20px; }
+      .sp-stat-num { font-size: clamp(28px, 8vw, 40px) !important; }
     }
 
     /* Mono kicker */
@@ -757,6 +806,35 @@
       .res-grid { grid-template-columns: repeat(2, 1fr); }
     }
 
+    /* ─── Mobile nav stabilisation (prevent layout jump on EN ↔ RU toggle) ─── */
+    @media (max-width: 720px) {
+      /* Hide the "Book a Call" button on mobile — CTA still in hero + hamburger */
+      nav#navbar .btn.btn-primary { display: none !important; }
+
+      /* Logo: smaller, single line */
+      .nav-logo {
+        font-size: 13px !important;
+        gap: 8px !important;
+        white-space: nowrap;
+      }
+
+      /* Lang toggle: fixed width so EN/RU buttons can never shift */
+      .lang-toggle {
+        flex-shrink: 0;
+      }
+      .lang-btn {
+        min-width: 30px;
+        text-align: center;
+        padding: 8px 10px !important;
+      }
+
+      /* Right cluster: ensure consistent spacing */
+      .nav-right { gap: 10px !important; }
+
+      /* Show hamburger (it was hidden by base styles for tablet sizes) */
+      .hamburger { display: flex; }
+    }
+
     /* ═══════════════════════════════════════════════════════════════════
        SWISS PULSE — GLOBAL OVERRIDE LAYER
        Applies the Swiss Pulse system to all pre-existing sections.
@@ -1311,6 +1389,23 @@
         </div>
       </div>
 
+      <!-- RIGHT: compact agent chat (vertically centred) -->
+      <div class="sp-hero-chat-wrap">
+        <div class="sp-chat sp-chat--compact" id="sp-chat" aria-live="polite">
+          <div class="sp-chat-head">
+            <div class="sp-chat-kicker">
+              <span class="sp-ck-dot"></span>
+              <span class="sp-ck-num" id="sp-chat-num">01 / 05</span>
+              <span id="sp-chat-topic">Reconciliation</span>
+            </div>
+            <div class="sp-chat-live">
+              <span class="sp-live-dot"></span>
+              <span>Live</span>
+            </div>
+          </div>
+          <div class="sp-chat-feed" id="sp-chat-feed"></div>
+        </div>
+      </div>
 
       <!-- Legacy hidden block (kept for safe diff; remove next pass) -->
       <div class="hero-visual" style="display:none">
@@ -1785,44 +1880,6 @@
         </div>
       </div>
 
-    </div>
-  </div>
-</section>
-
-
-<!-- ═══════════════════════════ AGENT CHAT (middle of page) ════════════ -->
-<section id="agent-chat">
-  <div class="container">
-    <div class="sp-chat-section">
-      <div class="sp-chat-section-head">
-        <div class="section-label">
-          <span class="en">Ask the Agent</span><span class="ru">Спроси у агента</span>
-        </div>
-        <h2 class="section-title">
-          <span class="en">Real requests we automate every week.</span>
-          <span class="ru">Реальные запросы, которые мы автоматизируем еженедельно.</span>
-        </h2>
-        <p class="section-sub">
-          <span class="en">Five client tasks, five agent replies. The kind of work that used to take a team — now handled in minutes.</span>
-          <span class="ru">Пять задач клиента, пять ответов агента. Работа, на которую раньше уходила команда — теперь решается за минуты.</span>
-        </p>
-      </div>
-      <div class="sp-chat-frame">
-        <div class="sp-chat" id="sp-chat" aria-live="polite">
-          <div class="sp-chat-head">
-            <div class="sp-chat-kicker">
-              <span class="sp-ck-dot"></span>
-              <span class="sp-ck-num" id="sp-chat-num">01 / 05</span>
-              <span id="sp-chat-topic">Reconciliation</span>
-            </div>
-            <div class="sp-chat-live">
-              <span class="sp-live-dot"></span>
-              <span>Live</span>
-            </div>
-          </div>
-          <div class="sp-chat-feed" id="sp-chat-feed"></div>
-        </div>
-      </div>
     </div>
   </div>
 </section>
@@ -2434,10 +2491,7 @@
       };
 
       // Section heads
-      reveal('#pain .section-head > *, #services .section-head > *, #industries .section-head > *, #process .section-head > *, #cta .section-head > *, #agent-chat .sp-chat-section-head > *', { stagger: 0.06 });
-
-      // Chat frame
-      reveal('.sp-chat-frame', { y: 30, duration: 0.7 });
+      reveal('#pain .section-head > *, #services .section-head > *, #industries .section-head > *, #process .section-head > *, #cta .section-head > *', { stagger: 0.06 });
 
       // Pain cards
       reveal('.pain-card', { y: 36, stagger: 0.07 });
