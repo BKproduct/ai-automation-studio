@@ -1,0 +1,12 @@
+# Секреты — никогда не коммитим
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+
+# Мусор
+.DS_Store
+__pycache__/
+*.pyc
+node_modules/
