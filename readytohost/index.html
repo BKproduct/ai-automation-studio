@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ReadyToHost — Concept</title>
+<meta name="description" content="Concept redesign for ReadyToHost: luxury short-stay homes with direct booking, and full-service hosting for property owners.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#16201c;
+  --ink-2:#24302b;
+  --paper:#f7f3ec;
+  --paper-2:#efe8dc;
+  --gold:#b08d57;
+  --gold-soft:#d9c3a0;
+  --muted:#6f6a61;
+  --rule:#e2d9ca;
+  --white:#fffdf9;
+  --serif:"Cormorant Garamond",Georgia,serif;
+  --sans:"Jost",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-weight:300;font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1240px;margin:0 auto;padding:0 32px}
+.eyebrow{font-family:var(--sans);font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);font-weight:400}
+h1,h2,h3{font-family:var(--serif);font-weight:400;margin:0;letter-spacing:-.01em}
+h2{font-size:clamp(36px,4.6vw,58px);line-height:1.08}
+h2 em,h1 em{font-style:italic;color:var(--gold)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;height:52px;padding:0 30px;font-family:var(--sans);font-size:13px;letter-spacing:.2em;text-transform:uppercase;font-weight:400;border:1px solid currentColor;transition:background .3s,color .3s,border-color .3s;cursor:pointer;background:transparent;color:inherit}
+.btn-gold{background:var(--gold);border-color:var(--gold);color:var(--white)}
+.btn-gold:hover{background:var(--ink);border-color:var(--ink)}
+.btn-line:hover{background:var(--ink);color:var(--white);border-color:var(--ink)}
+.btn-light{color:var(--white)}
+.btn-light:hover{background:var(--white);color:var(--ink)}
+
+/* demo ribbon */
+.ribbon{background:var(--ink);color:var(--gold-soft);font-size:12px;letter-spacing:.14em;text-transform:uppercase;text-align:center;padding:9px 16px}
+.ribbon a{color:var(--white);border-bottom:1px solid var(--gold)}
+
+/* nav */
+nav.top{position:absolute;left:0;right:0;z-index:20;color:var(--white)}
+nav.top .wrap{display:flex;align-items:center;justify-content:space-between;height:92px}
+.logo{font-family:var(--serif);font-size:28px;letter-spacing:.02em}
+.logo span{color:var(--gold-soft);font-style:italic}
+.links{display:flex;gap:38px;font-size:13px;letter-spacing:.18em;text-transform:uppercase}
+.links a{opacity:.85;transition:opacity .2s}
+.links a:hover{opacity:1}
+.nav-cta{height:44px;padding:0 22px}
+.burger{display:none;background:none;border:0;color:inherit;font-size:13px;letter-spacing:.2em;text-transform:uppercase;font-family:var(--sans);cursor:pointer}
+
+/* hero */
+.hero{position:relative;min-height:100vh;min-height:100svh;display:flex;align-items:flex-end;color:var(--white);background:#2b332e}
+.hero-img{position:absolute;inset:0;background:url("https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=2200&q=80") center/cover no-repeat;transform:scale(1.06);animation:settle 2.4s cubic-bezier(.2,.7,.2,1) forwards}
+@keyframes settle{to{transform:scale(1)}}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(14,20,17,.55) 0%,rgba(14,20,17,.15) 35%,rgba(14,20,17,.75) 100%)}
+.hero .wrap{position:relative;z-index:2;width:100%;padding-bottom:64px}
+.hero h1{font-size:clamp(48px,8vw,112px);line-height:.98;max-width:12ch;margin:18px 0 22px}
+.hero h1 em{color:var(--gold-soft)}
+.hero p.lead{max-width:520px;font-size:19px;opacity:.9;margin:0 0 40px}
+.fade{opacity:0;transform:translateY(18px);animation:up 1s cubic-bezier(.2,.7,.2,1) forwards}
+.d1{animation-delay:.25s}.d2{animation-delay:.45s}.d3{animation-delay:.65s}.d4{animation-delay:.85s}
+@keyframes up{to{opacity:1;transform:none}}
+
+/* booking bar */
+.booking{display:grid;grid-template-columns:1.3fr 1fr 1fr .8fr auto;background:var(--white);color:var(--ink);max-width:1000px;box-shadow:0 30px 60px -30px rgba(0,0,0,.5)}
+.booking label{display:flex;flex-direction:column;padding:16px 22px;border-right:1px solid var(--rule);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+.booking select,.booking input{border:0;background:transparent;font-family:var(--serif);font-size:20px;color:var(--ink);padding:4px 0 0;outline:none;width:100%;min-width:0}
+.booking .btn{height:auto;border:0}
+.hero-note{margin-top:14px;font-size:13px;opacity:.75;letter-spacing:.04em}
+.hero-note b{font-weight:400;color:var(--gold-soft)}
+
+/* two paths */
+.paths{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--rule)}
+.path{padding:64px 56px;display:flex;flex-direction:column;gap:14px}
+.path+.path{border-left:1px solid var(--rule);background:var(--paper-2)}
+.path h3{font-size:34px;line-height:1.1}
+.path p{margin:0;color:var(--muted);max-width:440px}
+.path a.more{margin-top:10px;font-size:13px;letter-spacing:.2em;text-transform:uppercase;border-bottom:1px solid var(--gold);align-self:flex-start;padding-bottom:4px}
+
+section{padding:120px 0}
+.head{display:flex;justify-content:space-between;align-items:flex-end;gap:32px;margin-bottom:56px;flex-wrap:wrap}
+.head p{max-width:420px;color:var(--muted);margin:0}
+
+/* stays */
+.stays{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+.stay{background:var(--white);display:flex;flex-direction:column;transition:transform .5s cubic-bezier(.2,.7,.2,1),box-shadow .5s}
+.stay:hover{transform:translateY(-6px);box-shadow:0 30px 50px -30px rgba(22,32,28,.35)}
+.stay .ph{aspect-ratio:4/5;overflow:hidden;background:var(--paper-2);position:relative}
+.stay .ph img{width:100%;height:100%;object-fit:cover;transition:transform 1.2s cubic-bezier(.2,.7,.2,1)}
+.stay:hover .ph img{transform:scale(1.05)}
+.tag{position:absolute;top:16px;left:16px;background:rgba(255,253,249,.92);font-size:11px;letter-spacing:.2em;text-transform:uppercase;padding:7px 12px}
+.stay .body{padding:26px 26px 30px;display:flex;flex-direction:column;gap:6px;flex:1}
+.stay .area{font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold)}
+.stay h3{font-size:28px}
+.stay .meta{color:var(--muted);font-size:15px}
+.stay .row{display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:18px;border-top:1px solid var(--rule)}
+.price{font-family:var(--serif);font-size:22px}
+.price small{font-family:var(--sans);font-size:13px;color:var(--muted)}
+.stay .row a{font-size:12px;letter-spacing:.2em;text-transform:uppercase;border-bottom:1px solid var(--gold);padding-bottom:3px}
+
+/* direct */
+.direct{background:var(--ink);color:var(--paper)}
+.direct .grid{display:grid;grid-template-columns:1fr 1.1fr;gap:80px;align-items:center}
+.direct .img{aspect-ratio:4/5;background:#2b332e url("https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=1400&q=80") center/cover}
+.direct h2 em{color:var(--gold-soft)}
+.compare{margin-top:44px;border-top:1px solid rgba(255,255,255,.14)}
+.compare div{display:grid;grid-template-columns:1.4fr 1fr 1fr;padding:18px 0;border-bottom:1px solid rgba(255,255,255,.14);font-size:15px}
+.compare div.h{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-soft)}
+.compare span:nth-child(3){color:var(--gold-soft)}
+.direct .btn{margin-top:40px}
+
+/* owners */
+.owners .grid{display:grid;grid-template-columns:1.1fr 1fr;gap:80px}
+.services{display:grid;grid-template-columns:1fr 1fr;gap:0;border-top:1px solid var(--rule);margin-top:40px}
+.svc{padding:28px 24px 28px 0;border-bottom:1px solid var(--rule)}
+.svc:nth-child(odd){border-right:1px solid var(--rule)}
+.svc:nth-child(even){padding-left:24px}
+.svc .n{font-family:var(--serif);font-style:italic;color:var(--gold);font-size:20px}
+.svc h3{font-size:24px;margin:4px 0 6px}
+.svc p{margin:0;color:var(--muted);font-size:15px}
+.estimate{background:var(--white);padding:48px;align-self:start;position:sticky;top:32px;border-top:3px solid var(--gold)}
+.estimate h3{font-size:32px;line-height:1.1;margin-bottom:8px}
+.estimate p{color:var(--muted);margin:0 0 26px;font-size:15px}
+.field{display:flex;flex-direction:column;margin-bottom:18px}
+.field span{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.field input,.field select{height:48px;border:0;border-bottom:1px solid var(--rule);background:transparent;font-family:var(--serif);font-size:20px;color:var(--ink);outline:none;border-radius:0}
+.field input:focus,.field select:focus{border-bottom-color:var(--gold)}
+.estimate .btn{width:100%;margin-top:10px}
+.estimate .ok{display:none;margin-top:18px;font-family:var(--serif);font-size:20px;color:var(--gold)}
+
+/* steps */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:48px;margin-top:20px}
+.step .n{font-family:var(--serif);font-size:72px;line-height:1;color:var(--gold-soft)}
+.step h3{font-size:28px;margin:12px 0 8px}
+.step p{margin:0;color:var(--muted)}
+
+/* reviews */
+.reviews{background:var(--paper-2)}
+.quotes{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+.q{background:var(--white);padding:40px 36px;display:flex;flex-direction:column;gap:20px}
+.q blockquote{margin:0;font-family:var(--serif);font-size:23px;line-height:1.35}
+.q .who{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+.stars{color:var(--gold);letter-spacing:.2em}
+.note{margin-top:24px;font-size:13px;color:var(--muted);font-style:italic}
+
+/* faq */
+.faq{max-width:860px}
+details{border-bottom:1px solid var(--rule);padding:26px 0}
+summary{cursor:pointer;list-style:none;font-family:var(--serif);font-size:26px;display:flex;justify-content:space-between;gap:24px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";color:var(--gold);font-family:var(--sans);font-weight:300;transition:transform .3s}
+details[open] summary::after{transform:rotate(45deg)}
+details p{margin:14px 0 0;color:var(--muted);max-width:680px}
+
+/* cta */
+.cta{position:relative;color:var(--white);text-align:center;background:#2b332e url("https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=2000&q=80") center/cover}
+.cta::before{content:"";position:absolute;inset:0;background:rgba(14,20,17,.62)}
+.cta .wrap{position:relative}
+.cta h2{max-width:14ch;margin:16px auto 34px}
+.cta h2 em{color:var(--gold-soft)}
+.cta .btns{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+
+footer{background:var(--ink);color:rgba(247,243,236,.7);padding:72px 0 40px;font-size:15px}
+footer .cols{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:40px;padding-bottom:48px;border-bottom:1px solid rgba(255,255,255,.12)}
+footer h4{font-family:var(--sans);font-weight:400;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold-soft);margin:0 0 16px}
+footer a{display:block;margin-bottom:8px}
+footer a:hover{color:var(--white)}
+footer .logo{color:var(--white);margin-bottom:14px}
+footer .base{display:flex;justify-content:space-between;gap:16px;padding-top:28px;font-size:13px;flex-wrap:wrap}
+
+.reveal{opacity:0;transform:translateY(28px);transition:opacity 1s cubic-bezier(.2,.7,.2,1),transform 1s cubic-bezier(.2,.7,.2,1)}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.fade,.reveal{opacity:1;transform:none}.hero-img{transform:none}}
+
+/* mobile menu */
+.menu{position:fixed;inset:0;background:var(--ink);color:var(--white);z-index:50;display:none;flex-direction:column;justify-content:center;padding:32px;gap:22px}
+.menu.open{display:flex}
+.menu a{font-family:var(--serif);font-size:40px}
+.menu .close{position:absolute;top:28px;right:24px;background:none;border:0;color:var(--white);font-size:13px;letter-spacing:.2em;text-transform:uppercase;font-family:var(--sans)}
+
+@media (max-width:1000px){
+  .links,.nav-cta{display:none}
+  .burger{display:block}
+  .booking{grid-template-columns:1fr 1fr}
+  .booking label:nth-child(2){border-right:0}
+  .booking label{border-bottom:1px solid var(--rule)}
+  .booking .btn{grid-column:1/-1;height:56px}
+  .paths,.direct .grid,.owners .grid{grid-template-columns:1fr}
+  .path+.path{border-left:0;border-top:1px solid var(--rule)}
+  .stays,.quotes,.steps{grid-template-columns:1fr 1fr}
+  .direct .grid,.owners .grid{gap:48px}
+  .estimate{position:static}
+  footer .cols{grid-template-columns:1fr 1fr}
+}
+@media (max-width:640px){
+  .wrap{padding:0 16px}
+  section{padding:72px 0}
+  nav.top .wrap{height:76px}
+  .logo{font-size:24px}
+  .hero .wrap{padding-bottom:28px}
+  .hero p.lead{font-size:17px;margin-bottom:28px}
+  .booking{grid-template-columns:1fr}
+  .booking label{border-right:0}
+  .path{padding:48px 16px}
+  .stays,.quotes,.steps,.services{grid-template-columns:1fr}
+  .svc,.svc:nth-child(even){padding:24px 0;border-right:0!important}
+  .estimate{padding:32px 20px}
+  .compare div{grid-template-columns:1.2fr 1fr 1fr;font-size:14px}
+  .direct .img{aspect-ratio:4/3}
+  footer .cols{grid-template-columns:1fr}
+  summary{font-size:22px}
+}
+</style>
+</head>
+<body>
+
+<div class="ribbon">Concept preview prepared for ReadyToHost · <a href="mailto:boris.korol@ai-automation.studio">AI Automation Studio</a></div>
+
+<nav class="top">
+  <div class="wrap">
+    <a href="#" class="logo">Ready<span>To</span>Host</a>
+    <div class="links">
+      <a href="#stays">Stays</a>
+      <a href="#direct">Book direct</a>
+      <a href="#owners">For owners</a>
+      <a href="#faq">FAQ</a>
+    </div>
+    <a href="#stays" class="btn btn-light nav-cta">Check availability</a>
+    <button class="burger" aria-label="Open menu" onclick="menu.classList.add('open')">Menu</button>
+  </div>
+</nav>
+<div class="menu" id="menu">
+  <button class="close" onclick="menu.classList.remove('open')">Close</button>
+  <a href="#stays" onclick="menu.classList.remove('open')">Stays</a>
+  <a href="#direct" onclick="menu.classList.remove('open')">Book direct</a>
+  <a href="#owners" onclick="menu.classList.remove('open')">For owners</a>
+  <a href="#faq" onclick="menu.classList.remove('open')">FAQ</a>
+</div>
+
+<header class="hero">
+  <div class="hero-img"></div>
+  <div class="wrap">
+    <div class="eyebrow fade d1">Boutique short stays · London</div>
+    <h1 class="fade d2">Homes, hosted <em>beautifully.</em></h1>
+    <p class="lead fade d3">Hand-picked apartments, prepared to hotel standard and cared for by a local team. Book direct for the best rate, with no platform fees.</p>
+    <form class="booking fade d4" onsubmit="event.preventDefault();document.getElementById('stays').scrollIntoView()">
+      <label>Destination
+        <select><option>All properties</option><option>Central London</option><option>West London</option></select>
+      </label>
+      <label>Check in<input type="date"></label>
+      <label>Check out<input type="date"></label>
+      <label>Guests
+        <select><option>2</option><option>1</option><option>3</option><option>4</option><option>5+</option></select>
+      </label>
+      <button class="btn btn-gold" type="submit">Search</button>
+    </form>
+    <div class="hero-note fade d4">Live availability and secure payment via <b>Guesty</b> · Instant confirmation</div>
+  </div>
+</header>
+
+<div class="paths">
+  <div class="path reveal">
+    <div class="eyebrow">For guests</div>
+    <h3>Stay somewhere that feels like yours.</h3>
+    <p>Calm, well-designed homes with fresh linen, a fully equipped kitchen and a host who answers in minutes.</p>
+    <a class="more" href="#stays">Explore stays</a>
+  </div>
+  <div class="path reveal">
+    <div class="eyebrow">For property owners</div>
+    <h3>Your property, professionally hosted.</h3>
+    <p>We price, list, clean, welcome guests and report back, so your home earns more with none of the work.</p>
+    <a class="more" href="#owners">Get a revenue estimate</a>
+  </div>
+</div>
+
+<section id="stays">
+  <div class="wrap">
+    <div class="head reveal">
+      <div>
+        <div class="eyebrow">The collection</div>
+        <h2>Our <em>stays</em></h2>
+      </div>
+      <p>Each home is photographed, described and priced exactly as on Airbnb, synced live from Guesty, so availability is always accurate.</p>
+    </div>
+    <div class="stays">
+      <article class="stay reveal">
+        <div class="ph"><img loading="lazy" src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=900&q=80" alt="Bright living room with sofa and large windows"><span class="tag">Guest favourite</span></div>
+        <div class="body">
+          <div class="area">Property one</div>
+          <h3>The Garden Residence</h3>
+          <div class="meta">2 bedrooms · 4 guests · Private terrace</div>
+          <div class="row"><div class="price">£— <small>/ night</small></div><a href="#">Book direct</a></div>
+        </div>
+      </article>
+      <article class="stay reveal">
+        <div class="ph"><img loading="lazy" src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=900&q=80" alt="Elegant living space with neutral tones"></div>
+        <div class="body">
+          <div class="area">Property two</div>
+          <h3>The Townhouse Suite</h3>
+          <div class="meta">1 bedroom · 2 guests · Workspace</div>
+          <div class="row"><div class="price">£— <small>/ night</small></div><a href="#">Book direct</a></div>
+        </div>
+      </article>
+      <article class="stay reveal">
+        <div class="ph"><img loading="lazy" src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=900&q=80" alt="Open-plan apartment with kitchen and dining area"><span class="tag">Long stays</span></div>
+        <div class="body">
+          <div class="area">Property three</div>
+          <h3>The Loft</h3>
+          <div class="meta">2 bedrooms · 5 guests · Lift access</div>
+          <div class="row"><div class="price">£— <small>/ night</small></div><a href="#">Book direct</a></div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="direct" id="direct">
+  <div class="wrap grid">
+    <div class="img reveal" role="img" aria-label="Calm bedroom with crisp linen"></div>
+    <div class="reveal">
+      <div class="eyebrow">Why book direct</div>
+      <h2>Same home. <em>Better stay.</em></h2>
+      <div class="compare">
+        <div class="h"><span></span><span>Platforms</span><span>Direct</span></div>
+        <div><span>Guest service fee</span><span>Up to ~15%</span><span>None</span></div>
+        <div><span>Best available rate</span><span>—</span><span>Guaranteed</span></div>
+        <div><span>Talk to your host</span><span>Via app</span><span>Phone &amp; WhatsApp</span></div>
+        <div><span>Flexible check-in</span><span>On request</span><span>Priority</span></div>
+        <div><span>Returning-guest offers</span><span>—</span><span>Yes</span></div>
+      </div>
+      <a href="#stays" class="btn btn-gold">Find your dates</a>
+    </div>
+  </div>
+</section>
+
+<section class="owners" id="owners">
+  <div class="wrap grid">
+    <div class="reveal">
+      <div class="eyebrow">For property owners</div>
+      <h2>We host. <em>You earn.</em></h2>
+      <p style="color:var(--muted);max-width:520px;margin-top:20px">Full-service short-let management for owners who want strong returns and a property that's looked after properly.</p>
+      <div class="services">
+        <div class="svc"><div class="n">i.</div><h3>Listing &amp; photography</h3><p>Professional photos and copy, live on Airbnb, Booking.com, Vrbo and our own site.</p></div>
+        <div class="svc"><div class="n">ii.</div><h3>Dynamic pricing</h3><p>Rates adjusted daily to demand, events and season to lift occupancy and yield.</p></div>
+        <div class="svc"><div class="n">iii.</div><h3>Guest care, 24/7</h3><p>Screening, messaging, check-in and on-call support, all handled for you.</p></div>
+        <div class="svc"><div class="n">iv.</div><h3>Hotel-grade cleaning</h3><p>Linen, restocking and inspection after every stay, with photo reports.</p></div>
+        <div class="svc"><div class="n">v.</div><h3>Maintenance</h3><p>Trusted local trades, issues fixed fast and logged.</p></div>
+        <div class="svc"><div class="n">vi.</div><h3>Owner reporting</h3><p>Monthly statements and a live calendar of bookings and earnings.</p></div>
+      </div>
+    </div>
+    <form class="estimate reveal" onsubmit="event.preventDefault();this.querySelector('.ok').style.display='block'">
+      <h3>What could your property earn?</h3>
+      <p>Free, no-obligation estimate within 24 hours.</p>
+      <label class="field"><span>Postcode</span><input required placeholder="e.g. W8"></label>
+      <label class="field"><span>Bedrooms</span><select><option>Studio</option><option>1</option><option selected>2</option><option>3</option><option>4+</option></select></label>
+      <label class="field"><span>Your email</span><input type="email" required placeholder="you@example.com"></label>
+      <button class="btn btn-gold" type="submit">Get my estimate</button>
+      <div class="ok">Thank you. We'll be in touch within 24 hours.</div>
+    </form>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="head reveal"><div><div class="eyebrow">Onboarding</div><h2>Live in <em>two weeks</em></h2></div></div>
+    <div class="steps">
+      <div class="step reveal"><div class="n">01</div><h3>Visit &amp; estimate</h3><p>We view the property and share a realistic revenue forecast.</p></div>
+      <div class="step reveal"><div class="n">02</div><h3>Prepare &amp; list</h3><p>Styling advice, photography and listings across every channel.</p></div>
+      <div class="step reveal"><div class="n">03</div><h3>Host &amp; report</h3><p>We run every stay. You get monthly payouts and full transparency.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="reviews">
+  <div class="wrap">
+    <div class="head reveal"><div><div class="eyebrow">Guest reviews</div><h2>Words from <em>our guests</em></h2></div></div>
+    <div class="quotes">
+      <div class="q reveal"><div class="stars">★★★★★</div><blockquote>“Spotless, beautifully designed and better than the photos. The host thought of everything.”</blockquote><div class="who">Sample review</div></div>
+      <div class="q reveal"><div class="stars">★★★★★</div><blockquote>“Felt like staying in a boutique hotel, but with a proper kitchen and space to breathe.”</blockquote><div class="who">Sample review</div></div>
+      <div class="q reveal"><div class="stars">★★★★★</div><blockquote>“Quick replies, easy check-in, perfect location. We've already booked again — direct.”</blockquote><div class="who">Sample review</div></div>
+    </div>
+    <p class="note">Placeholder text for the concept. The live site would pull real reviews from your Airbnb and Guesty listings.</p>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap faq">
+    <div class="eyebrow reveal">Questions</div>
+    <h2 class="reveal" style="margin-bottom:24px">Good to <em>know</em></h2>
+    <details><summary>Is booking direct secure?</summary><p>Yes. Payments are processed through Guesty's secure booking engine, the same system that manages our Airbnb and Booking.com reservations.</p></details>
+    <details><summary>What time is check-in and check-out?</summary><p>Check-in from 3pm, check-out by 11am. Early and late options are available on request, with priority for direct guests.</p></details>
+    <details><summary>Do you offer longer stays?</summary><p>Yes. Stays of 28 nights or more receive a reduced rate. Get in touch for corporate and relocation stays.</p></details>
+    <details><summary>I own a property. What does management cost?</summary><p>We work on a transparent commission of booking revenue, with no set-up fees. Request an estimate and we'll share full terms.</p></details>
+  </div>
+</section>
+
+<section class="cta">
+  <div class="wrap reveal">
+    <div class="eyebrow" style="color:var(--gold-soft)">ReadyToHost</div>
+    <h2>Your next stay, <em>or your next guest.</em></h2>
+    <div class="btns">
+      <a href="#stays" class="btn btn-gold">Book a stay</a>
+      <a href="#owners" class="btn btn-light">List your property</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="cols">
+      <div><div class="logo">Ready<span style="color:var(--gold-soft);font-style:italic">To</span>Host</div><p style="margin:0;max-width:300px">Boutique short stays and full-service hosting in London.</p></div>
+      <div><h4>Guests</h4><a href="#stays">Stays</a><a href="#direct">Book direct</a><a href="#faq">FAQ</a></div>
+      <div><h4>Owners</h4><a href="#owners">Management</a><a href="#owners">Revenue estimate</a></div>
+      <div><h4>Contact</h4><a href="#">hello@readytohost.co.uk</a><a href="#">WhatsApp</a><a href="#">Instagram</a></div>
+    </div>
+    <div class="base"><span>© 2026 ReadyToHost</span><span>Concept by AI Automation Studio</span></div>
+  </div>
+</footer>
+
+<script>
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+const ci=document.querySelectorAll('.booking input[type=date]');
+const t=new Date();t.setDate(t.getDate()+14);const o=new Date(t);o.setDate(o.getDate()+3);
+if(ci.length===2){ci[0].valueAsDate=t;ci[1].valueAsDate=o}
+</script>
+</body>
+</html>
