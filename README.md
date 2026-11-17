@@ -17,9 +17,9 @@ Static source of the AI Automation Studio landing page: an AI automation studio 
 ## Design principles
 
 - One decisive accent colour, used sparingly.
-- Hairline rules and a strict grid instead of cards and gradients.
-- Monospaced numerals for every figure.
-- No stock imagery; every claim backed by a case or a number.
+- A 12-column grid and 1px hairline borders; no drop shadows.
+- Geist Mono with tabular numerals for every figure.
+- Generous whitespace: 120px section padding on desktop, 72px on mobile.
 
 ## Run locally
 
